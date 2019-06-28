@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="axios.min.js"></script>
+    <style>
+        .bg {
+            width: 100%;
+            height: 100%;
+        }
+        .main{
+            height:1080px;
+            width:1920px;
+            background: url("teamBg.png")  no-repeat;
+            background-size: cover;
+
+        }
+        .video{
+            background-color:black;
+            height:358px;
+            width:489px;
+            margin-top:289px;
+            margin-left:216px;
+            position: absolute;
+            border-radius:10px
+        }
+        .picList{
+            background-color:black;
+            height:178px;
+            width:620px;
+            margin-top:689px;
+            margin-left:146px;
+            position: absolute;
+            overflow:hidden
+        }
+        .btn{
+            margin-top:650px;
+            margin-left:1091px;
+            width:202px;
+            height:64px;
+            position: absolute;
+        }
+        .title{
+            position: absolute;
+            margin-top:275px;
+            margin-left:1093px;
+            height: 61px;
+            font-size: 35px;
+            color: white;
+        }
+        .content{
+            letter-spacing:1px;
+            line-height:160%;
+            text-indent:50px;
+            position: absolute;
+            margin-top:361px;
+            margin-left:1093px;
+            width: 628px;
+            font-size: 25px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div id="bgMeeting"  class="main">
+        <div class="video">
+        </div>
+        <div class="picList">
+            <div :style="classObject">3123131321</div>
+        </div>
+        <h class="title">黨建項目</h>
+        <div class="content">个人建议做一个有透明度的png，然后把这个图片设置成input的背景。因为在IE里面，对于alpha滤镜，会把这个滤镜应用到对于元素及其内部所有文本上的，透明度设置得低一点还看不太出来，设置得一高，就会有各种问题了。</div>
+    <button @click="execute(message)" class="btn">{{message}}</button>
+</div>
+
+<script>
+    let vm = new Vue({
+        el: '#bgMeeting',
+        data() {
+            return {
+                message: '开始会议',
+                instance:{},
+                classObject:{
+                    color: 'red',
+                    fontSize: '13px',
+                    marginLeft: '-20px',
+
+                }
+            }
+        },
+        methods: {
+            execute(msg) {
+                if(msg == '开始会议'){
+                    let path = 'identity/parActivityObject/execute'
+                    this.instance.post(path,{activityId:'a6721c5d-541a-487a-9bf2-8d57cd9de630',organizationId:'011117'}).then( (response)=> {
+                        window.setInterval(this.showPic, 1000*6);
+                        console.log(response)
+                            this.classObject.marginLeft = '20px'
+                            this.message = '结束会议'
+                        }).catch( (error)=> {
+                            alert('执行任务失败，请检查网络'+error)
+                        });
+
+                }else {
+                    this.executeOver();
+                }
+            },
+            executeOver() {
+                alert('over')
+            },
+            showPic() {
+console.log(123)
+            }
+
+        },
+        created(){
+            this.instance = axios.create({
+                baseURL: '/api/',
+                timeout: 50000,
+
+            });
+        }
+    })
+</script>
+<!--<script src="tes.js"></script>-->
+</body>
+</html>
