@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-    <script src="axios.min.js"></script>
+    <script src="lib/vue.min.js"></script>
+    <script src="lib/axios.min.js"></script>
+    <script src="js/api.js"></script>
     <style>
         .bg {
             width: 100%;
@@ -93,9 +94,9 @@
         },
         methods: {
             execute(msg) {
-                if(msg == '开始会议'){
+                if(msg === '开始会议'){
                     let path = 'identity/parActivityObject/execute'
-                    this.instance.post(path,{activityId:'a6721c5d-541a-487a-9bf2-8d57cd9de630',organizationId:'011117'}).then( (response)=> {
+                    this.$http.post(path,{activityId:'a6721c5d-541a-487a-9bf2-8d57cd9de630',organizationId:'011117'}).then( (response)=> {
                         window.setInterval(this.showPic, 1000*6);
                         console.log(response)
                             this.classObject.marginLeft = '20px'
@@ -112,16 +113,9 @@
                 alert('over')
             },
             showPic() {
-console.log(123)
+                console.log(123)
             }
 
-        },
-        created(){
-            this.instance = axios.create({
-                baseURL: '/api/',
-                timeout: 50000,
-
-            });
         }
     })
 </script>
