@@ -53,22 +53,29 @@
     .content_left {
         flex: 3;
         background: transparent;
-        padding: 40px 40px;
+        padding: 80px 40px;
     }
     .content_right {
-        width: 1500px;
-        padding: 40px 0;
+        width: 1400px;
+        padding: 180px 0;
     }
     .swiper-slide {
-        width: 680px;
+        width: 612px;
     }
     .activity_detail {
-        width: 680px;
-        height: 470px;
+        width: 612px;
+        height: 423px;
         margin: 0 auto;
         background: url("img/index/card-bg.png") no-repeat;
         background-size: cover;
         border-radius: 3px;
+    }
+    .activity_detail2 {
+        width: 612px;
+        height: 423px;
+        margin: 0 auto;
+       background-color: black;
+        opacity: 0.2;
     }
 </style>
 <body>
@@ -80,26 +87,28 @@
                 <div style="width: 300px;height: 600px;"></div>
             </div>
             <div class="content_right">
-                <swiper ref="awesomeSwiperA" :options="swipperOptions" >
-                    <!-- slides -->
-                    <swiper-slide>
-                        <div class="activity_detail"></div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="activity_detail"></div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="activity_detail"></div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="activity_detail"></div>
-                    </swiper-slide>
+                <div style="position: relative;z-index: 10">
+                    <swiper ref="awesomeSwiperA" :options="swipperOptions" >
+                        <!-- slides -->
+                        <swiper-slide>
+                            <div class="activity_detail"></div>
+                        </swiper-slide>
+                        <swiper-slide>
+                            <div class="activity_detail"></div>
+                        </swiper-slide>
+                        <swiper-slide>
+                            <div class="activity_detail"></div>
+                        </swiper-slide>
+                        <swiper-slide>
+                            <div class="activity_detail"></div>
+                        </swiper-slide>
 
-                    <!-- Optional controls -->
-                    <div class="swiper-pagination"  slot="pagination"></div>
-                    <div class="swiper-button-prev" slot="button-prev"></div>
-                    <div class="swiper-button-next" slot="button-next"></div>
-                </swiper>
+                        <!-- Optional controls -->
+                        <div class="swiper-pagination"  slot="pagination"></div>
+                        <div class="swiper-button-prev" slot="button-prev"></div>
+                        <div class="swiper-button-next" slot="button-next"></div>
+                    </swiper>
+                </div>
             </div>
         </div>
     </div>
@@ -117,8 +126,8 @@
                     slidesPerView: 'auto',
                     coverflowEffect: {
                         rotate: 50,
-                        stretch: 100,
-                        depth: 300,
+                        stretch: 250,
+                        depth: 400,
                         modifier: 1,
                         slideShadows : true
                     },
