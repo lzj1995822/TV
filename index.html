@@ -4,10 +4,176 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="lib/vue.min.js"></script>
+    <script src="lib/swiper.min.js"></script>
+    <script src="lib/vue-awesome-swiper.js"></script>
+
+    <!-- Include stylesheet -->
+    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet">-->
+    <!--&lt;!&ndash; Include the Swiper library &ndash;&gt;-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+    <!--&lt;!&ndash; Swiper JS Vue &ndash;&gt;-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue-awesome-swiper@3.1.2/dist/vue-awesome-swiper.js"></script>-->
+    <link rel="stylesheet" href="css/swiper.min.css" />
 </head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    html {
+        height: 100%;
+    }
+    body {
+        width: 100%;
+        height: 100%;
+    }
+    #app {
+        width: 100%;
+        height: 100%;
+    }
+    .title {
+        width: 1083px;
+        height: 90px;
+        position: relative;
+        top: 40px;
+        left: 40px;
+        background: url("img/index/title.png") no-repeat;
+    }
+    .container {
+        width: 100%;
+        height: 100%;
+        background: url("img/index/bg.jpg") no-repeat;
+        background-size: 100% auto;
+    }
+    .content {
+        margin-top: 80px;
+        display: flex;
+    }
+    .content_left {
+        flex: 3;
+        background: transparent;
+        padding: 80px 40px;
+    }
+    .content_right {
+        width: 1400px;
+        padding: 180px 0;
+    }
+    .swiper-slide {
+        width: 612px;
+    }
+    .activity_detail {
+        width: 612px;
+        height: 423px;
+        margin: 0 auto;
+        background: url("img/index/card-bg.png") no-repeat;
+        background-size: cover;
+        border-radius: 3px;
+    }
+    .activity_detail2 {
+        width: 612px;
+        height: 423px;
+        margin: 0 auto;
+       background-color: black;
+        opacity: 0.2;
+    }
+</style>
 <body>
 <div id="app">
+    <div class="container">
+        <div class="title"></div>
+        <div class="content">
+            <div class="content_left">
+                <div style="width: 300px;height: 600px;"></div>
+            </div>
+            <div class="content_right">
+                <div style="position: relative;z-index: 10">
+                    <swiper ref="awesomeSwiperA" :options="swipperOptions" >
+                        <!-- slides -->
+                        <swiper-slide>
+                            <div class="activity_detail"></div>
+                        </swiper-slide>
+                        <swiper-slide>
+                            <div class="activity_detail"></div>
+                        </swiper-slide>
+                        <swiper-slide>
+                            <div class="activity_detail"></div>
+                        </swiper-slide>
+                        <swiper-slide>
+                            <div class="activity_detail"></div>
+                        </swiper-slide>
 
+                        <!-- Optional controls -->
+                        <div class="swiper-pagination"  slot="pagination"></div>
+                        <div class="swiper-button-prev" slot="button-prev"></div>
+                        <div class="swiper-button-next" slot="button-next"></div>
+                    </swiper>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script type="application/ecmascript">
+    Vue.use(VueAwesomeSwiper);
+    let app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                swipperOptions: {
+                    effect: 'coverflow',
+                    grabCursor: true,
+                    centeredSlides: true,
+                    slidesPerView: 'auto',
+                    coverflowEffect: {
+                        rotate: 50,
+                        stretch: 250,
+                        depth: 400,
+                        modifier: 1,
+                        slideShadows : true
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev'
+                    },
+                    pagination: {
+                        el: '.swiper-pagination'
+                    },
+                    on: {
+                        progress: function (progress) {
+                            for (i = 0; i < this.slides.length; i++) {
+                                var slide = this.slides.eq(i);
+                                var slideProgress = this.slides[i].progress;
+                                modify = 1;
+                                if (Math.abs(slideProgress) > 1) {
+                                    modify = (Math.abs(slideProgress) - 1) * 0.3 + 1;
+                                }
+                                translate = slideProgress * modify * 260 + 'px';
+                                scale = 1 - Math.abs(slideProgress) / 5;
+                                zIndex = 999 - Math.abs(Math.round(10 * slideProgress));
+                                slide.transform('translateX(' + translate + ') scale(' + scale + ')');
+                                slide.css('zIndex', zIndex);
+                                slide.css('opacity', 1);
+                                if (Math.abs(slideProgress) > 3) {
+                                    slide.css('opacity', 0);
+                                }
+                            }
+                        },
+                        setTransition: function (transition) {
+                            for (let i = 0; i < this.slides.length; i++) {
+                                let slide = this.slides.eq(i)
+                                slide.transition(transition);
+                            }
+
+                        }
+                    }
+                },
+            }
+        },
+        methods: {
+        },
+        created() {
+        }
+    })
+</script>
 </body>
 </html>
