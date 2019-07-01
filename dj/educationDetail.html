@@ -277,7 +277,7 @@ var vueIns = new Vue({
                     "height": "16px",
                     "display": "inline-block"
                 }
-            }) : _vm._e(), _vm._v(" "), _c('div', {staticStyle: {"float": "right"}}, [_vm._v(_vm._s(_vm.formatSeconds(task.lengthOfTime)))])])])
+            }) : _vm._e(), _vm._v(" "), _c('div', {staticStyle: {"float": "right"}}, [_vm._v(_vm._s(task.lengthOfTime))])])])
         }), 0), _vm._v(" "), 
 	_c('div', {
       directives: [{
@@ -425,7 +425,7 @@ var vueIns = new Vue({
     },
     sign: function sign() {
 		var organizationId = window.location.search.split('&')[2].split('=')[1];
-    this.task = this.list[document.activeElement.id.split("")[1]];
+        this.task = this.list[document.activeElement.id.split("")[1]];
 		var _this = this;
 		if(this.task.flag) {
 			this.playVideo(this.task)
@@ -435,10 +435,8 @@ var vueIns = new Vue({
 		this.$nextTick(function () {
 			if (!_this.qrcode) {
 			  _this.initQrCode();
-			}
-
-			_this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId +"&videoId="+ _this.task.id);
-
+			};
+			_this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId +"&videoId="+ _this.task.id +"&id="+ signId);
 			_this.cbtn = 'btn1';
 			_this.timer = setInterval(function() {
 				_this.loadSignList(_this.task.id)
@@ -568,7 +566,7 @@ var vueIns = new Vue({
       this.seen = true;
       this.cbtn = 'btn2';
       this.$nextTick(function () {
-		  var str = "http://172.16.0.207:8882/sign.html?type=1&orga242323432432432423423434nizationId=" + organizationId +"&videoId="+ item.id;
+		  var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId +"&videoId="+ item.id +"id="+signId;
 		this.qrcode.makeCode(str);
 		_this3.timer = setInterval(function() {
 				_this3.loadSignList(item.id)
@@ -608,19 +606,27 @@ var vueIns = new Vue({
 		var organizationId = window.location.search.split('&')[2].split('=')[1];
 		var self = this;
 		$.ajax({
-			url: 'http://122.97.218.162:18306/JRPartyService/Party.svc/getSignList',
-			type: "get",
-			data: {
+			url: 'http://localhost:8762/api/identity/tVSignIn/list',
+			type: "post",
+            async: false,
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
+            },
+            contentType:'application/json',
+            processData:true,
+			data: JSON.stringify({
 				videoId: videoId,
-				organizationId: organizationId
-			},
+				organizationId: organizationId,
+                activityId:id,
+			}),
 			success: function (data) {
-				self.signInList = data.data1;
-				self.signOutList = data.data2;
+			    self.signId = data.content[0].id;
+				self.signInList = data.content[0].signInRecord;
+				self.signOutList = data.content[0].signOutRecord;
 			}
 		});
 	},
-	formatSeconds: function formatSeconds(value) {
+	/*formatSeconds: function formatSeconds(value) {
 		var secondTime = parseInt(value);// 秒
 		var minuteTime = 0;// 分
 		var hourTime = 0;// 小时
@@ -647,7 +653,7 @@ var vueIns = new Vue({
 		}
 		return result;
 	},
-
+*/
   },
   mounted: function mounted() {
     this.init();
