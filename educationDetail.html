@@ -447,7 +447,9 @@ var vueIns = new Vue({
       var _this2 = this;
       this.seen = false;
       this.vdoVisible = true;
-	  window.clearInterval(this.timer);
+      if (task.flag === 0) {
+          window.clearInterval(this.timer);
+      }
       this.$nextTick(function () {
         var mp = new MediaPlayer();
         var instanceId = mp.getNativePlayerInstanceID(); 
@@ -457,6 +459,9 @@ var vueIns = new Vue({
         mp.setVolume(10);
         mp.setSingleMedia(task.videoUrl);
         mp.playFromStart();
+        if(task.flag === 1) {
+            return;
+        }
         var time = new Date().getTime();
         var z = setInterval(function() {
             var time1 = new Date().getTime();
@@ -465,11 +470,8 @@ var vueIns = new Vue({
             if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
                 clearInterval(z);
                 mp.releaseMediaPlayer(instanceId);
-                if(task.flag==1){
-                    _this2.showExitCode(task);
-                }
                 _this2.uploadVideoRecord();
-
+                _this2.showExitCode(task);
             }
         },2000);
      //   _this2.player = document.getElementById('myVideo');
