@@ -581,9 +581,6 @@ var vueIns = new Vue({
         url: '/api/identity/tVSignIn/list',
         type: "post",
         async: false,
-        beforeSend: function(request) {
-          request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
-        },
         contentType:'application/json',
         processData:true,
         data: JSON.stringify({
@@ -610,9 +607,6 @@ var vueIns = new Vue({
 			url: '/api/identity/tVSignIn/list',
 			type: "post",
             async: false,
-            beforeSend: function(request) {
-                request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
-            },
             contentType:'application/json',
             processData:true,
 			data: JSON.stringify({
@@ -668,9 +662,6 @@ var vueIns = new Vue({
                 type: "GET",
                 async: false,
                 contentType:'application/json',
-                beforeSend: function(request) {
-                    request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
-                },
                 data:{
                     number:number,
                     activityId:activityId,

@@ -131,26 +131,14 @@
 	    var districtId = '011601';
         var number = '02117616500012212'*/
         $(document).ready(function(){
-            $.ajax({
-                url:'/api/identity/sysUser/login',
-                type: "post",
-                contentType:'application/json',
-                async: false,
-                data: JSON.stringify({
-                        userName:'广电测试村',
-                        password:'123'
-                    }),
-                success: function (data) {
-                    sessionStorage.setItem('token', data.content.token);
-                }
-            });
+            console.log(activityId,districtId,number)
             $.ajax({
                 url: '/api/identity/parActivity/'+activityId+'id',
                 type: "get",
                 async: false,
-                beforeSend: function(request) {
+            /*    beforeSend: function(request) {
                     request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
-                },
+                },*/
                 contentType:'application/json',
                 success: function(data){
                     $("#title").text(data.content.title);
@@ -249,9 +237,6 @@
             type: "get",
             async: false,
             contentType:'application/json',
-            beforeSend: function(request) {
-                request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
-            },
             data:{
                 number:number,
                 activityId:activityId,
