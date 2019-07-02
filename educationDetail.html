@@ -625,8 +625,9 @@ var vueIns = new Vue({
                 activityId:activityId,
 			}),
 			success: function (data) {
-				self.signInList = data.content[0].signInRecord.indexOf(" ")>0 ? data.content[0].signInRecord.split(" "):data.content[0].signInRecord ;
-				self.signOutList = data.content[0].signOutRecord.indexOf(" ")>0 ? data.content[0].signOutRecord.split(" "):data.content[0].signInRecord;
+			    let temp = data.content[0];
+				self.signInList = temp.signInRecord ? temp.signInRecord.split(" ") : '';
+				self.signOutList = temp.signOutRecord ? temp.signOutRecord.split(" ") : '';
 			}
 		});
 	},
