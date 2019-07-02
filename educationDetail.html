@@ -345,7 +345,7 @@ var vueIns = new Vue({
 				"vertical-align": "top"
             }
         }, _vm._l((_vm.signInList), function (item) {
-            return _c('span', [_vm._v(_vm._s(item.userName) + " ")])
+            return _c('span', [_vm._v(_vm._s(item) + " ")])
         }), 0)]), _vm._v(" "), _c('div', {
             directives: [{
                 name: "show",
@@ -361,7 +361,7 @@ var vueIns = new Vue({
 				"vertical-align": "top"
             }
         }, _vm._l((_vm.signOutList), function (item) {
-            return _c('span', [_vm._v(_vm._s(item.userName) + " ")])
+            return _c('span', [_vm._v(_vm._s(item) + " ")])
         }), 0)])]), _vm._v(" "), _vm.vdoVisible ? _c('div', {
       staticStyle: {
         "width": "400px",
@@ -615,8 +615,8 @@ var vueIns = new Vue({
                 activityId:id,
 			}),
 			success: function (data) {
-				self.signInList = data.content[0].signInRecord;
-				self.signOutList = data.content[0].signOutRecord;
+				self.signInList = data.content[0].signInRecord.split(" ");
+				self.signOutList = data.content[0].signOutRecord.split(" ");
 			}
 		});
 	},
