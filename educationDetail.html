@@ -465,10 +465,7 @@ var vueIns = new Vue({
             if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
                 clearInterval(z);
                 mp.releaseMediaPlayer(instanceId);
-                if(task.flag === 1) {
-                  _this2.showExitCode(task);
-                }
-			    _this2.uploadVideoRecord();
+                _this2.showExitCode(task);
             }
         },2000);
      //   _this2.player = document.getElementById('myVideo');
@@ -483,7 +480,7 @@ var vueIns = new Vue({
     //     });
       });
     },
-	/*uploadVideoRecord: function() {
+/*	uploadVideoRecord: function() {
 		var _this7 = this;
 		var organizationId = window.location.search.split('&')[2].split('=')[1];
 		$.ajax({
@@ -561,8 +558,20 @@ var vueIns = new Vue({
     },
     showExitCode: function showExitCode(item) {
       var _this3 = this;
-		this.vdoVisible = false;
-		var organizationId = window.location.search.split('&')[2].split('=')[1];
+      this.vdoVisible = false;
+      $.ajax({
+          url:'/api/identity/tVSignIn/'+item.id+"id",
+          type: "put",
+          async: false,
+          contentType:'application/json',
+          data: JSON.stringify({
+              flag:1
+          }),
+          success:function(data){
+              _this3.loadVideoList();
+          }
+      })
+      var organizationId = window.location.search.split('&')[2].split('=')[1];
       this.seen = true;
       this.cbtn = 'btn2';
       this.$nextTick(function () {

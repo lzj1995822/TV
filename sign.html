@@ -99,7 +99,7 @@
                     async: false,
                     contentType:'application/json',
                     success: function(data){
-                        console.log(data.code);
+                        this.username = '';
                         if(data.code==200){
                             if(self.type==0){ 
                              vant.Toast('签到成功');
