@@ -124,9 +124,12 @@
         var number = para.split('=')[1].split('&')[0];
         var PartyBranchId = para.split('&')[1].split('=')[1];
         var StudyId = para.split('&')[2].split('=')[1];*/
-	    var StudyId = '4e1f70be-35bc-45cd-84d7-348d70080688';
+        var activityId = window.location.search.split("&")[0].split("=")[1];
+        var districtId = window.location.search.split("&")[1].split("=")[1];
+        var number = window.location.search.split("&")[2].split("=")[1];
+	  /*  var activityId = '4e1f70be-35bc-45cd-84d7-348d70080688';
 	    var districtId = '011601';
-        var number = '02117616500012212'
+        var number = '02117616500012212'*/
         $(document).ready(function(){
             $.ajax({
                 url:'/api/identity/sysUser/login',
@@ -142,7 +145,7 @@
                 }
             });
             $.ajax({
-                url: '/api/identity/parActivity/'+StudyId+'id',
+                url: '/api/identity/parActivity/'+activityId+'id',
                 type: "get",
                 async: false,
                 beforeSend: function(request) {
@@ -239,7 +242,7 @@
             if (!online) {
                 return;
             }
-			window.location.href='educationDetail.html?number='+number+'&StudyId='+StudyId+'&districtId='+districtId;
+			window.location.href='educationDetail.html?number='+number+'&activityId='+activityId+'&districtId='+districtId;
         });
         $.ajax({
             url: '/api/identity/easyNVR/number',
@@ -251,7 +254,7 @@
             },
             data:{
                 number:number,
-                activityId:StudyId,
+                activityId:activityId,
                 organizationId:districtId,
             },
             success: function (data) {
