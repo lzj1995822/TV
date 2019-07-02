@@ -468,7 +468,7 @@ var vueIns = new Vue({
                 if(task.flag==1){
                     _this2.showExitCode(task);
                 }
-                _this2.loadVideoList();
+                _this2.uploadVideoRecord();
 
             }
         },2000);
@@ -484,22 +484,17 @@ var vueIns = new Vue({
     //     });
       });
     },
-/*	uploadVideoRecord: function() {
+	uploadVideoRecord: function() {
 		var _this7 = this;
-		var organizationId = window.location.search.split('&')[2].split('=')[1];
 		$.ajax({
-            url: 'http://localhost:8762/api/identity/parActivityObject/execute',
+            url: '/api/identity//tVSignIn/updateflag'+'?id='+_this7.task.id+"&flag=1",
 			type: "get",
 			async: false,
-			data: {
-			  videoId: _this7.task.id,
-			  organizationId: organizationId
-			},
 			success: function success(data) {
 				_this7.loadVideoList();
 			  }
 		});
-	},*/
+	},
     init: function init() {
       document.onkeydown = keyDown;
       
