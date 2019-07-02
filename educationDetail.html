@@ -4,9 +4,9 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="../js/vue.runtime.js"></script>
-	<script src="../js/qrcode.min.js"></script>
-    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script src="js/vue.runtime.js"></script>
+	<script src="js/qrcode.min.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
      <!-- <script src="./eruda.js"> -->
     <!--<script>
         eruda.init();
@@ -22,7 +22,7 @@
         .backGround{
             width: 1280px;
             height: 720px;
-            background: url("../img/yuanjiao/bg1.png");
+            background: url("img/yuanjiao/bg1.png");
             background-size: cover;
         }
         .content{
@@ -39,7 +39,7 @@
             height: 201px;
             float: left;
             margin: 0 28px 55px 28px;
-            background-image: url("../img/yuanjiao/wxuanz.png");
+            background-image: url("img/yuanjiao/wxuanz.png");
             border-radius: 10px;
         }
         .viewTime{
@@ -62,7 +62,7 @@
             position: absolute;
             left: 1070px;
             top: 660px;
-            background-image: url("../img/yuanjiao/xiayiye.png");
+            background-image: url("img/yuanjiao/xiayiye.png");
             width: 135px;
             height: 26px;
         }
@@ -72,13 +72,13 @@
             position: absolute;
             top: 60px;
             left: 895px;
-            background-image: url("../img/yuanjiao/back.png");
+            background-image: url("img/yuanjiao/back.png");
             background-size: cover;
         }
         .signBg{
             width: 1280px;
             height: 720px;
-            background: url("../img/yuanjiao/bg2.png");
+            background: url("img/yuanjiao/bg2.png");
             background-size: cover;
         }
         .sign{
@@ -95,13 +95,13 @@
 			width:151px;
 			height:55px;
 			margin: 500px auto;
-			background: url("../img/yuanjiao/btn1.png");
+			background: url("img/yuanjiao/btn1.png");
 		}
 		.btn2{
 			width:151px;
 			height:55px;
 			margin: 500px auto;
-			background: url("../img/yuanjiao/btn2.png");
+			background: url("img/yuanjiao/btn2.png");
 		}
 		textarea {
 			display: none;
@@ -118,7 +118,7 @@
 			border-radius: 0 0 10px 10px;
 		}
 		.play_btn {
-			background: url('../img/yuanjiao/play_btn.png');
+			background: url('img/yuanjiao/play_btn.png');
 			position: absolute;
 			top: 0px;
 			left: 0px;
@@ -268,7 +268,7 @@ var vueIns = new Vue({
 		attrs: {
 			"id": "t"+index
 		}
-      }, [_c('div', {staticClass: "viewTime"}, [_c('div', {staticStyle: {"float": "left"}}, [_vm._v(_vm._s(task.name))]), _vm._v(" "), (task.flag) ? _c('div', {
+      }, [_c('div', {staticClass: "viewTime"}, [_c('div', {staticStyle: {"float": "left"}}, [_vm._v(_vm._s(task.videoName))]), _vm._v(" "), (task.flag) ? _c('div', {
                 staticStyle: {
                     "top": "12px",
                     "left": "4px","position":"relative",
@@ -439,7 +439,7 @@ var vueIns = new Vue({
 			_this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId +"&videoId="+ _this.task.id +"&id="+ signId);
 			_this.cbtn = 'btn1';
 			_this.timer = setInterval(function() {
-				_this.loadSignList(_this.task.id)
+				_this.loadSignList(_this.task.videoId)
 			}, 1500)
 		});
     },
@@ -483,7 +483,7 @@ var vueIns = new Vue({
     //     });
       });
     },
-	uploadVideoRecord: function() {
+	/*uploadVideoRecord: function() {
 		var _this7 = this;
 		var organizationId = window.location.search.split('&')[2].split('=')[1];
 		$.ajax({
@@ -498,7 +498,7 @@ var vueIns = new Vue({
 				_this7.loadVideoList();
 			  }
 		});
-	},
+	},*/
     init: function init() {
       document.onkeydown = keyDown;
       
@@ -566,7 +566,7 @@ var vueIns = new Vue({
       this.seen = true;
       this.cbtn = 'btn2';
       this.$nextTick(function () {
-		  var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId +"&videoId="+ item.id +"id="+signId;
+		  var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId +"&videoId="+ item.id +"&id="+signId;
 		this.qrcode.makeCode(str);
 		_this3.timer = setInterval(function() {
 				_this3.loadSignList(item.id)
@@ -575,10 +575,10 @@ var vueIns = new Vue({
     },
     loadVideoList: function loadVideoList() {
       var self = this;
-      var id = window.location.search.split('&')[1].split('=')[1];
-	  var organizationId = window.location.search.split('&')[2].split('=')[1];
+      var activityId = window.location.search.split('&')[1].split('=')[1];
+	  var districtId = window.location.search.split('&')[2].split('=')[1];
       $.ajax({
-        url: 'http://localhost:8762/api/identity/distLearningActivityVideo/list',
+        url: '/api/identity/tVSignIn/list',
         type: "post",
         async: false,
         beforeSend: function(request) {
@@ -587,7 +587,8 @@ var vueIns = new Vue({
         contentType:'application/json',
         processData:true,
         data: JSON.stringify({
-          activityId: id,
+          activityId: activityId,
+          organizationId:districtId,
         }),
         success: function success(data) {
 			self.list = data.content;
@@ -603,10 +604,10 @@ var vueIns = new Vue({
 		});
     },
 	loadSignList: function (videoId) {
-		var organizationId = window.location.search.split('&')[2].split('=')[1];
+        var districtId = window.location.search.split('&')[2].split('=')[1];
 		var self = this;
 		$.ajax({
-			url: 'http://localhost:8762/api/identity/tVSignIn/list',
+			url: '/api/identity/tVSignIn/list',
 			type: "post",
             async: false,
             beforeSend: function(request) {
@@ -616,7 +617,7 @@ var vueIns = new Vue({
             processData:true,
 			data: JSON.stringify({
 				videoId: videoId,
-				organizationId: organizationId,
+				organizationId: districtId,
                 activityId:id,
 			}),
 			success: function (data) {
@@ -659,16 +660,23 @@ var vueIns = new Vue({
     this.init();
     this.loadVideoList();
 	var number = window.location.search.split('&')[0].split('=')[1];
-	var StudyId = window.location.search.split('&')[1].split('=')[1];
-	this.picTimer = setInterval(function() { 
-						$.ajax({
-							url: 'http://122.97.218.162:18306/JRPartyService/Television.svc/getPicture',
-							type: "GET",
-							data:{
-								number:number,
-								StudyContent: StudyId
-							}})
-					},30000)
+	var activityId = window.location.search.split('&')[1].split('=')[1];
+    var districtId = window.location.search.split('&')[2].split('=')[1];
+	this.picTimer = setInterval(function() {
+            $.ajax({
+                url: '/api/identity/easyNVR/number',
+                type: "GET",
+                async: false,
+                contentType:'application/json',
+                beforeSend: function(request) {
+                    request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
+                },
+                data:{
+                    number:number,
+                    activityId:activityId,
+                    organizationId:districtId,
+                }})
+        },30000)
 	}
 }).$mount('#app');
 </script>

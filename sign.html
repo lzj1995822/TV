@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js" sync></script>
     <script src="https://cdn.jsdelivr.net/npm/vant@1.6/lib/vant.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script	src="../js/fingerprint2.min.js"></script>
+	<script	src="js/fingerprint2.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Document</title>
     <style type="text/css">
@@ -21,7 +21,7 @@
         .bg{
             width: 100%;
             height: 100%;
-            background-image: url("../img/yuanjiao/signIn.png");
+            background-image: url("img/yuanjiao/signIn.png");
             background-size: 100% 100% ;
         }
         .van-cell-group{
@@ -87,28 +87,27 @@
             signIn(username){
                 let self = this;
                 let id = window.location.search.split("&")[3].split("=")[1];
+                console.log(username);
               /*  let videoId = window.location.search.split('&')[2].split('=')[1],
                 /!*videoId:'4a32b448-62b1-4543-99fe-d1b20b00a813',*!/
                 let organizationId = window.location.search.split('&')[1].split('=')[1],
                 /!*organizationId:'b526c2e7-ec30-439b-b298-7bed0d853db7',*!/*/
 				new Fingerprint2().get(function(result, components){
 					$.ajax({
-                    url: 'http://localhost:8762/api/identity/tVSignIn/'+id+"update",
-                    type: "post",
+                    url: '/api/identity/tVSignIn/record'+"?id="+id+"&type="+self.type+"&username="+username,
+                    type: "put",
                     async: false,
-                    data:{
-                        type:type,
-                        signInRecord:username,
-                    },
+                    contentType:'application/json',
                     success: function(data){
-                        if(data.success){
+                        console.log(data.code);
+                        if(data.code==200){
                             if(self.type==0){ 
                              vant.Toast('签到成功');
                             }else{
                                 vant.Toast('签退成功');
                             }
                          }else{
-                            vant.Toast(data.message);
+                            vant.Toast("签到失败，请重新签到");
                          }
                     },
                 });

@@ -6,7 +6,7 @@
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <!-- <script type="text/javascript" src="../js/jquery-3.2.1/jquery-3.2.1.min.js"></script> -->
-		 <script type="text/javascript" src="../js/jquery.js"></script>
+		 <script type="text/javascript" src="js/jquery.js"></script>
         <style type="text/css">
             *{
                 margin: 0;
@@ -15,7 +15,7 @@
             .bg{
                 width: 1280px;
                 height: 720px;
-                background-image: url("../img/yuanjiao/yuanjiaobg.png");
+                background-image: url("img/yuanjiao/yuanjiaobg.png");
                 background-size: cover;
             }
             .photo{
@@ -50,7 +50,7 @@
                 top: 430px;
                 width:150px;
                 height: 59px;
-                 background-image: url("../img/yuanjiao/play.png");
+                 background-image: url("img/yuanjiao/play.png");
                /* top: 403px;
                 left: 19px;*/
             }
@@ -60,7 +60,7 @@
                 left: 36px;
                 width: 298px;
                 height: 35px;
-                background-image: url("../img/yuanjiao/back.png");
+                background-image: url("img/yuanjiao/back.png");
             }
             .continue{
                 box-sizing: border-box;
@@ -110,7 +110,7 @@
             setTimeout(function() {
 				history.pushState(null, null, location.href);
                 window.addEventListener('popstate', function(event) {
-					location.href = "./index.html";
+					location.href = "index.html";
                     window.removeEventListener('popstate', function() {});
             },0);
             })
@@ -124,12 +124,12 @@
         var number = para.split('=')[1].split('&')[0];
         var PartyBranchId = para.split('&')[1].split('=')[1];
         var StudyId = para.split('&')[2].split('=')[1];*/
-	    var StudyId = 'd53adbfc-163e-49aa-8e94-13ec680fca52';
-	    var PartyBranchId = 'b526c2e7-ec30-439b-b298-7bed0d853db7';
+	    var StudyId = '4e1f70be-35bc-45cd-84d7-348d70080688';
+	    var districtId = '011601';
         var number = '02117616500012212'
         $(document).ready(function(){
             $.ajax({
-                url:'http://localhost:8762/api/identity/sysUser/login',
+                url:'/api/identity/sysUser/login',
                 type: "post",
                 contentType:'application/json',
                 async: false,
@@ -142,7 +142,7 @@
                 }
             });
             $.ajax({
-                url: 'http://localhost:8762/api/identity/parActivity/'+StudyId+'id',
+                url: '/api/identity/parActivity/'+StudyId+'id',
                 type: "get",
                 async: false,
                 beforeSend: function(request) {
@@ -154,7 +154,6 @@
                     $("#type").text(data.content.type);
                     $("#content").text(data.content.context);
                 }
-
             });
         });
         function iAlert(obj){
@@ -240,11 +239,10 @@
             if (!online) {
                 return;
             }
-			window.location.href='educationDetail.html?number='+number+'&StudyId='+StudyId+'&organizationId='+PartyBranchId;
+			window.location.href='educationDetail.html?number='+number+'&StudyId='+StudyId+'&districtId='+districtId;
         });
         $.ajax({
-           // url: 'http://122.97.218.162:18306/JRPartyService/Television.svc/getPicture',
-            url: 'http://localhost:8762/api/identity/easyNVR/number',
+            url: '/api/identity/easyNVR/number',
             type: "get",
             async: false,
             contentType:'application/json',
@@ -254,7 +252,7 @@
             data:{
                 number:number,
                 activityId:StudyId,
-                organizationId:PartyBranchId,
+                organizationId:districtId,
             },
             success: function (data) {
                 if(data.msg=="抓图失败"){
@@ -262,7 +260,7 @@
                     showAlert("摄像头不在线");
                 }else{
                     if((data.content!="") && (data.content!=null)){
-                        let str= data.content;  //测试，正式发布请注释
+                        let str= data.content;
                         $('#photo').css('backgroundImage',"url('"+str+"')").css('backgroundSize','cover')
                     }
                 }
