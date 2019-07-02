@@ -610,6 +610,7 @@ var vueIns = new Vue({
 		});
     },
 	loadSignList: function (videoId) {
+        var activityId = window.location.search.split('&')[1].split('=')[1];
         var districtId = window.location.search.split('&')[2].split('=')[1];
 		var self = this;
 		$.ajax({
@@ -621,11 +622,11 @@ var vueIns = new Vue({
 			data: JSON.stringify({
 				videoId: videoId,
 				organizationId: districtId,
-                activityId:id,
+                activityId:activityId,
 			}),
 			success: function (data) {
-				self.signInList = data.content[0].signInRecord.split(" ");
-				self.signOutList = data.content[0].signOutRecord.split(" ");
+				self.signInList = data.content[0].signInRecord.indexOf(" ")>0 ? data.content[0].signInRecord.split(" "):data.content[0].signInRecord ;
+				self.signOutList = data.content[0].signOutRecord.indexOf(" ")>0 ? data.content[0].signOutRecord.split(" "):data.content[0].signInRecord;
 			}
 		});
 	},
@@ -658,7 +659,10 @@ var vueIns = new Vue({
 	},
 */
       formatSeconds: function formatSeconds(value){
-           return Number(value.split(":")[0])*3600+Number(value.split(":")[1])*60+Number(value.split(":")[2])
+          if(value){
+              return Number(value.split(":")[0])*3600+Number(value.split(":")[1])*60+Number(value.split(":")[2])
+          }
+
       }
   },
   mounted: function mounted() {
