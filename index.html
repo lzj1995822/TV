@@ -9,136 +9,32 @@
     <script src="lib/axios.min.js"></script>
     <script src="js/api.js"></script>
     <script src="lib/vue-seamless-scroll.min.js"></script>
-    <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <!-- 引入组件库 -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <!-- Include stylesheet -->
-    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet">-->
-    <!--&lt;!&ndash; Include the Swiper library &ndash;&gt;-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
-    <!--&lt;!&ndash; Swiper JS Vue &ndash;&gt;-->
-    <!--<script src="https://cdn.jsdelivr.net/npm/vue-awesome-swiper@3.1.2/dist/vue-awesome-swiper.js"></script>-->
+    <script src="lib/element-ui.js"></script>
+    <link rel="stylesheet/less" type="text/css" href="css/tv-index.less">
+    <script src="lib/less.min.js"></script>
     <link rel="stylesheet" href="css/swiper.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
 </head>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-    }
-    html {
-        height: 100%;
-    }
-    body {
-        width: 100%;
-        height: 100%;
-    }
-    #app {
-        width: 100%;
-        height: 100%;
-    }
-    .title {
-        width: 1083px;
-        height: 90px;
-        position: relative;
-        top: 40px;
-        left: 40px;
-        background: url("img/index/title.png") no-repeat;
-    }
-    .container {
-        width: 100%;
-        height: 100%;
-        background: url("img/index/bg.jpg") no-repeat;
-        background-size: 100% auto;
-    }
-    .content {
-        margin-top: 100px;
-        display: flex;
-    }
-    .content_left {
-        flex: 3.5;
-        background: transparent;
-        padding: 0px 60px;
-    }
-    .content_right {
-        width: 1400px;
-        height: 500px;
-        margin-right: 60px;
-    }
-    .swiper-slide {
-        width: 773px;
-    }
-    .activity_detail {
-        width: 773px;
-        height: 532px;
-        margin: 0 auto;
-        background: url("img/index/card-bg.png") no-repeat;
-        background-size: cover;
-        border-radius: 3px;
-        color: white;
-    }
-    .activity_detail2 {
-        width: 612px;
-        height: 423px;
-        margin: 0 auto;
-        background-color: black;
-        opacity: 0.2;
-    }
-    .warp {
-        height: 300px;
-        overflow: hidden;
-        background-image: linear-gradient(-45deg, #2E6AC1, #4463B7, #3D58B2);
-        border: 1px solid #007aff7d;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.27), 0 0 80px rgba(0, 0, 0, 0.06) inset;;
-    }
-    .warp ul {
-        padding: 0 20px;
-    }
-    .warp ul li {
-        list-style: none;
-        font-size: 20px;
-        line-height: 36px;
-        width: 100% !important;
-        border-bottom: 1px solid #ffffff;
-        color: #f5f5f5;
-        padding-top: 14px;
-    }
-    .left_title {
-        display: flex;
-        background-image: linear-gradient(to bottom, #ffffff ,#E3E6E7);
-        padding: 10px;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-    }
-    .swiper-pagination {
-        margin: 40px auto;
-        position: relative;
-    }
-    .swiper-pagination-bullet {
-        width: 18px;
-        height: 18px;
-        margin: 0 4px;
-    }
-    .el-col {
-        padding: 0 10px 0 0 !important;
-    }
-</style>
 <body>
-<div id="app">
+<div id="app" v-cloak>
     <div class="container">
-        <div class="title"></div>
+        <div class="title">
+        </div>
+        <div class="org">
+            <img class="org_img" src="img/index/org_logo.png" alt="">
+            <h3 style="color: #f2f2f2">&emsp;{{currentOrg.name}}</h3>
+        </div>
         <div class="content">
             <div class="content_left">
                 <div>
                     <div class="left_title">
-                        <img src="img/index/acting.png" alt=""><h2>&nbsp;本月执行中</h2>
+                        <img class="left_title_img1" src="img/index/acting.png" alt=""><h2>&nbsp;本月执行中</h2>
                     </div>
                     <vue-seamless-scroll :data="parActivity.currentMonth" class="warp">
                         <ul class="item" ref="listItem">
                             <li v-for="(item,index) in parActivity.currentMonth" style="width: 300px;">
                                 <span>{{index+1}}、{{item.title}}</span>
-                                <span style="float:right;font-size: 20px;">{{item.month}}</span>
+                                <span class="month-display">{{item.month}}</span>
                             </li>
                         </ul>
                     </vue-seamless-scroll>
@@ -147,18 +43,17 @@
                 <br>
                 <div>
                     <div class="left_title">
-                        <img src="img/index/plan.png" alt=""><h2>&nbsp;下月待执行</h2>
+                        <img class="left_title_img2" src="img/index/plan.png" alt=""><h2>&nbsp;下月待执行</h2>
                     </div>
                     <vue-seamless-scroll :data="parActivity.nextMonth" class="warp">
                         <ul class="item" ref="listItem">
                             <li v-for="(item,index) in parActivity.nextMonth" style="width: 300px;">
                                 <span>{{index+1}}、{{item.title}}</span>
-                                <span style="float:right;font-size: 20px;">{{item.month}}</span>
+                                <span class="month-display">{{item.month}}</span>
                             </li>
                         </ul>
                     </vue-seamless-scroll>
                 </div>
-
             </div>
             <div class="content_right">
                 <div style="position: relative;z-index: 10">
@@ -167,27 +62,32 @@
                         <!-- slides -->
                         <swiper-slide v-for="(item, index) in todoList" :key="item.id">
                             <div class="activity_detail">
-                                <h1 style="position: relative;top: 60px;left: 60px;">
-                                    <img v-show="item.taskType === 'Party'" src="/img/party-logo.png" alt="党建logo"/>
-                                    <img v-show="item.taskType === 'DistLearning'" src="/img/learning-logo.png" alt="远教logo"/>
-                                        {{item.title}}</h1>
-                                <div style="position: relative;top: 100px;left: 60px;font-size: 24px">
+                                <h1 class="detail-title">
+                                    <img class="detail_img" v-show="item.taskType === 'Party'" src="/img/party-logo.png" alt="党建logo"/>
+                                    <img class="detail_img" v-show="item.taskType === 'DistLearning'" src="/img/learning-logo.png" alt="远教logo"/>
+                                    {{item.title}}</h1>
+                                <div class="detail_content">
                                     <el-row style="margin: 15px 0">
-                                        <el-col style="width: 140px;">任务类型：</el-col>
-                                        <el-col style="width: 480px;">{{item.type}}</el-col>
+                                        <el-col class="label-width">任务类型：</el-col>
+                                        <el-col class="value-width">{{item.type}}</el-col>
                                     </el-row>
                                     <el-row style="margin: 15px 0">
-                                        <el-col style="width: 140px;">任务分值：</el-col>
-                                        <el-col style="width: 480px;">{{item.score}}分</el-col>
+                                        <el-col class="label-width">任务分值：</el-col>
+                                        <el-col class="value-width">{{item.score}}分</el-col>
                                     </el-row>
                                     <el-row style="margin: 15px 0">
-                                        <el-col style="width: 140px;">截止日期：</el-col>
-                                        <el-col style="width: 480px;">{{item.month}}</el-col>
+                                        <el-col class="label-width">截止日期：</el-col>
+                                        <el-col class="value-width">{{item.month}}</el-col>
                                     </el-row>
                                     <el-row style="margin: 15px 0">
-                                        <el-col style="width: 140px;">任务内容：</el-col>
-                                        <el-col style="width: 480px;">{{item.context}}</el-col>
+                                        <el-col class="label-width">任务内容：</el-col>
+                                        <el-col class="value-width">{{item.context}}</el-col>
                                     </el-row>
+                                </div>
+                                <div class="status-container">
+                                    <img v-if="item.status === '2'" class="status-img" src="img/finished.png" alt="">
+                                    <img v-else-if="item.status === '1'" class="status-img" src="img/review.png" alt="">
+                                    <img v-else-if="item.status === '0'" class="status-img" src="img/wait_acting.png" alt="">
                                 </div>
                             </div>
                         </swiper-slide>
@@ -250,23 +150,77 @@
                         }
                     }
                 },
+                currentOrg: {},
                 parActivity: {},
-                todoList:[]
+                todoList: [],
+                number: '02117616500012212',
             }
         },
         methods: {
+            init() {
+                let KEY = {
+                    UP: 28,
+                    DOWN: 29,
+                    LEFT: 30,
+                    RIGHT: 31,
+                    PC_UP:38,
+                    PC_DOWN:40,
+                    PC_LEFT:37,
+                    PC_RIGHT:39,
+                    ENTER: 13,
+                    BACK: 114,
+                    EXIT: 61
+                };
+                let keyDown = (evt) => {
+                    console.log(this.$refs.awesomeSwiperA);
+                    evt = (evt) ? evt : ((window.event) ? window.event : "");//兼容IE和Firefox获得keyBoardEvent对象
+                    let keyCode = evt.keyCode ? evt.keyCode : evt.which;
+                    switch (keyCode) {
+                        case KEY.DOWN:
+                        case KEY.PC_DOWN:
+                            break;
+                        case KEY.UP:
+                        case KEY.PC_UP:
+                            break;
+                        case KEY.LEFT:
+                        case KEY.PC_LEFT:
+                            this.$refs.awesomeSwiperA.swiper.slidePrev();
+                            break;
+                        case KEY.RIGHT:
+                        case KEY.PC_RIGHT:
+                            this.$refs.awesomeSwiperA.swiper.slideNext();
+                            break;
+                        case KEY.ENTER:
+                            let index = this.$refs.awesomeSwiperA.activeIndex;
+                            let activity = this.todoList[index];
+                            window.location = `/party_activity_detail.html?activityId=${activity.id}&organizationId=${this.currentOrg.organizationId}`;
+                            break;
+                            default:
+                    }
+                    return false;
+                };
+                document.onirkeypress = keyDown;
+                document.onkeydown = keyDown;
+
+            }
         },
         created() {
             this.$http.get('/identity/parActivity/tv/index').then(
                 data => {
                     this.parActivity = data.data.content;
                 }
-            )
-            this.$http.get('/identity/parActivityObject/number/02117616500012212').then(
+            );
+            this.$http.get(`/identity/parActivityObject/number/${this.number}`).then(
                 data => {
                     this.todoList = data.data.content;
                 }
-            )
+            );
+            this.$http.get(`/identity/parCamera/number/${this.number}`).then(
+                data => {
+                    this.currentOrg = data.data.content;
+                }
+            );
+            this.init();
         }
     })
 </script>
