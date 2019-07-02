@@ -467,7 +467,9 @@ var vueIns = new Vue({
             var time1 = new Date().getTime();
             var curTime = mp.getCurrentPlayTime();
             var allTime = _this2.formatSeconds(task.lengthOfTime);
+            showAlert("sdsds,播放1结束")
             if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
+                showAlert("sdsds,播放结2束")
                 clearInterval(z);
                 mp.releaseMediaPlayer(instanceId);
                 _this2.uploadVideoRecord();
