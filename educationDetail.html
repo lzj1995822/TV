@@ -436,7 +436,7 @@ var vueIns = new Vue({
 			if (!_this.qrcode) {
 			  _this.initQrCode();
 			};
-			_this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId +"&videoId="+ _this.task.id +"&id="+ signId);
+			_this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId +"&videoId="+ _this.task.videoId +"&id="+  _this.task.id);
 			_this.cbtn = 'btn1';
 			_this.timer = setInterval(function() {
 				_this.loadSignList(_this.task.videoId)
@@ -566,10 +566,10 @@ var vueIns = new Vue({
       this.seen = true;
       this.cbtn = 'btn2';
       this.$nextTick(function () {
-		  var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId +"&videoId="+ item.id +"&id="+signId;
+		  var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId +"&videoId="+ item.videoId +"&id="+item.id;
 		this.qrcode.makeCode(str);
 		_this3.timer = setInterval(function() {
-				_this3.loadSignList(item.id)
+				_this3.loadSignList(item.videoId)
 			}, 1500)
       });
     },
@@ -615,7 +615,6 @@ var vueIns = new Vue({
                 activityId:id,
 			}),
 			success: function (data) {
-			    self.signId = data.content[0].id;
 				self.signInList = data.content[0].signInRecord;
 				self.signOutList = data.content[0].signOutRecord;
 			}
