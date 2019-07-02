@@ -6,116 +6,333 @@
     <script src="lib/vue.min.js"></script>
     <script src="lib/axios.min.js"></script>
     <script src="js/api.js"></script>
+    <script src="lib/swiper.min.js"></script>
+    <script src="lib/vue-awesome-swiper.js"></script>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
     <style>
-        .bg {
-            width: 100%;
-            height: 100%;
-        }
-        .main{
-            height:1080px;
-            width:1920px;
-            background: url("teamBg.png")  no-repeat;
+        .main {
+            height: 1080px;
+            width: 1920px;
+            background: url("img/party_activity_detail/bg2.png") no-repeat;
             background-size: cover;
+            z-index: -1;
 
         }
-        .video{
-            background-color:black;
-            height:358px;
-            width:489px;
-            margin-top:289px;
-            margin-left:216px;
+
+        /*截图*/
+        .video {
+            /*background-color: black;*/
+            height: 429px;
+            width: 586px;
+            margin-top: 239px;
+            margin-left: 205px;
             position: absolute;
-            border-radius:10px
+            border-radius: 10px;
+            z-index: 1;
         }
-        .picList{
-            background-color:black;
-            height:178px;
-            width:620px;
-            margin-top:689px;
-            margin-left:146px;
+
+        /*截图背景*/
+        .videoBg {
+            margin-top: 225px;
+            margin-left: 81px;
             position: absolute;
-            overflow:hidden
+            background: url("img/party_activity_detail/ship.png") no-repeat;
+            background-size: cover;
+            z-index: 0;
+            height: 750px;
+            width: 976px;
+            border: none;
+
         }
-        .btn{
-            margin-top:650px;
-            margin-left:1091px;
-            width:202px;
-            height:64px;
+
+        /*轮播*/
+        .picList {
+            height: 132px;
+            width: 625px;
+            margin-top: 708px;
+            margin-left: 185px;
+            position: absolute;
+            overflow: hidden;
+
+            /*background: rgba(170, 238, 255, .5);*/
+            /*border: 8px solid rgba(255, 255, 255, .5);*/
+        }
+
+        /*按钮位置*/
+        .btnPosition {
+            margin-top: 647px;
+            margin-left: 1093px;
+            width: 207px;
+            height: 73px;
             position: absolute;
         }
-        .title{
+        /*按钮浮动*/
+        .btnPosition:hover {
+
+        }
+
+        /*任务名*/
+        .title {
             position: absolute;
-            margin-top:275px;
-            margin-left:1093px;
+            margin-top: 275px;
+            margin-left: 1093px;
             height: 61px;
             font-size: 35px;
             color: white;
         }
-        .content{
-            letter-spacing:1px;
-            line-height:160%;
-            text-indent:50px;
+
+        /*任务详情*/
+        .content {
+            letter-spacing: 1px;
+            line-height: 160%;
+            text-indent: 50px;
             position: absolute;
-            margin-top:361px;
-            margin-left:1093px;
+            margin-top: 361px;
+            margin-left: 1093px;
             width: 628px;
             font-size: 25px;
             color: white;
+        }
+
+        .nowPic {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*轮播内各个图片*/
+        .picListStyle {
+            margin-top: 13px;
+            width: 100%;
+            height: 100%;
+        }
+
+        /*任务框*/
+        .mission {
+            height: 552px;
+            width: 694px;
+            position: absolute;
+            top: 227px;
+            left: 1063px;
+        }
+
+        /*左下角*/
+        .bottomLeft {
+            height: 65px;
+            width: 450px;
+            position: absolute;
+            top: 959px;
+            left: 54px;
+        }
+
+        .swiper-slide-active {
+            transition: all 1s;
+            transform: scale(1.2) !important;
+        }
+
+        .swiper-slide-active .picListStyle {
+        }
+        .unselectable {
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -o-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
 <body>
 
-<div id="bgMeeting"  class="main">
-        <div class="video">
-        </div>
-        <div class="picList">
-            <div :style="classObject">3123131321</div>
-        </div>
-        <h class="title">黨建項目</h>
-        <div class="content">个人建议做一个有透明度的png，然后把这个图片设置成input的背景。因为在IE里面，对于alpha滤镜，会把这个滤镜应用到对于元素及其内部所有文本上的，透明度设置得低一点还看不太出来，设置得一高，就会有各种问题了。</div>
-    <button @click="execute(message)" class="btn">{{message}}</button>
+<div id="bgMeeting" class="main">
+
+    <div class="video">
+        <img :src="exexuteImg" :style="shanShuo">
+        <img :src="nowPic" v-if="nowPic!=''" class="nowPic">
+    </div>
+
+    <div class="videoBg"></div>
+    <div class="picList" class="unselectable">
+        <swiper :options="swiperOption" ref="mySwiper" class="unselectable">
+            <template v-for="(items,index) in shotList">
+                <swiper-slide><img :src="items" class="picListStyle" :id="index"></swiper-slide>
+            </template>
+
+            <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+
+    </div>
+    <div class="bottomLeft">
+        <a style="color: white;margin: auto;font-size: 30px;font-weight:500">选择,按 <img
+                src="img/party_activity_detail/continue.png" style="width: 45px;vertical-align:middle"> 执行,按 <img
+                src="img/party_activity_detail/back.png" style="width: 45px;vertical-align:middle"> 返回</a>
+    </div>
+    <img src="img/party_activity_detail/mission.png" class="mission">
+    <h class="title">{{title}}</h>
+    <div class="content">
+        {{context}}
+    </div>
+    <button @click="execute(message)"  class="btnPosition" style="background-color:transparent;z-index: 2;border: 0px"></button>
+    <img :src="btnImg" class="btnPosition" style="z-index: 1">
 </div>
 
 <script>
+    Vue.use(VueAwesomeSwiper);
     let vm = new Vue({
         el: '#bgMeeting',
         data() {
             return {
+                activityId:'',
+                organizationId:'',
+                title: '',
+                context: '',
                 message: '开始会议',
-                instance:{},
-                classObject:{
-                    color: 'red',
-                    fontSize: '13px',
-                    marginLeft: '-20px',
+                //控制开始轮播
+                index: 0,
+                //当前轮播的位置
+                currentIndex: 0,
+                //轮播图片存放
+                shotList: [],
+                //当前截图
+                nowPic: '',
+                swiperOption: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                    freeMode: true,
+                    autoplay: {// 自动滑动
+                        delay: 5000, //1秒切换一次
+                        disableOnInteraction: false,
+                        waitForTransition: true
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true
+                    },
+                },
+                //闪烁点的样式
+                shanShuo: {
+                    zIndex: '3',
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    width: '30px',
+                    height: '30px',
+                    display: ''
 
-                }
+                },
+                //闪烁点图片
+                exexuteImg: 'img/party_activity_detail/execute.png',
+                //按钮图片
+                btnImg:'img/party_activity_detail/begin.png',
+                //闪烁点定时器
+                shanShuoTime: {},
+                //截图定时器
+                timer: {}
             }
         },
         methods: {
             execute(msg) {
-                if(msg === '开始会议'){
-                    let path = 'identity/parActivityObject/execute'
-                    this.$http.post(path,{activityId:'a6721c5d-541a-487a-9bf2-8d57cd9de630',organizationId:'011117'}).then( (response)=> {
-                        window.setInterval(this.showPic, 1000*6);
-                        console.log(response)
-                            this.classObject.marginLeft = '20px'
-                            this.message = '结束会议'
-                        }).catch( (error)=> {
-                            alert('执行任务失败，请检查网络'+error)
-                        });
+                clearInterval(this.timer); // 防止多次点击开启多个定时器.
 
-                }else {
+                if (msg === '开始会议') {
+                    //执行按钮变换
+                    let path = 'identity/parActivityObject/execute'
+                    this.$http.post(path, {
+                        activityId: this.activityId,
+                        organizationId: this.organizationId
+                    }).then((response) => {
+                        this.btnImg = 'img/party_activity_detail/over.png'
+                        this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
+
+                        this.timer = window.setInterval(() => {
+                            this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
+                        }, 10000);
+                        this.message = '结束会议'
+                        //执行标志闪烁
+                        this.imgShanshuo()
+                    }).catch((error) => {
+                        alert('执行任务失败，请检查网络' + error)
+                    });
+
+                } else {
                     this.executeOver();
                 }
             },
             executeOver() {
-                alert('over')
+                clearInterval(this.timer); // 防止多次点击开启多个定时器.
+                clearInterval(this.shanShuoTime);
+                let path = 'identity/parActivityObject/executeOver'
+                this.$http.post(path, {
+                    activityId: this.activityId,
+                    organizationId: this.organizationId
+                }).then((data) => {
+
+                })
+
             },
-            showPic() {
-                console.log(123)
+            showPic(activityId, organizationId) {
+                // let number = this.getParam('number');
+                this.index = this.index + 1
+                if (this.index == 5) {
+                    this.$refs.mySwiper.swiper.slideTo(2, 1000, false)
+                }
+                let number = '02987617140001550'
+                // let activityId = 'a6721c5d-541a-487a-9bf2-8d57cd9de630'
+                // let organizationId = '3bbcae4d-37a0-4d41-a5f8-460ef0bb66ac'
+                let path = `identity/easyNVR/number?number=${number}&activityId=${activityId}&organizationId=${organizationId}`
+                this.$http.get(path).then((response) => {
+                    this.nowPic = response.data.content
+                    this.shotList.push(response.data.content)
+                }).catch((res) => {
+                    console.log(res)
+                })
+            },
+            //解析值
+            getParam(paramName) {
+                let paramValue = "";
+                let isFound = false;
+                if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+                    let arrSource = decodeURI(this.location.search).substring(1, this.location.search.length).split("&");
+                    let i = 0;
+                    while (i < arrSource.length && !isFound) {
+                        if (arrSource[i].indexOf("=") > 0) {
+                            if (arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase()) {
+                                paramValue = arrSource[i].split("=")[1];
+                                isFound = true;
+                            }
+                        }
+                        i++;
+                    }
+                }
+                return paramValue;
+            },
+            imgShanshuo() {
+                this.shanShuoTime = window.setInterval(() => {
+                    this.shanShuo.display === '' ? this.shanShuo.display = 'none' : this.shanShuo.display = '';
+                }, 1000);
+            },
+            showMissionContent(activityId) {
+                let path = `identity/parActivity/${activityId}id`
+                this.$http.get(path).then((data) => {
+                    console.log(data)
+                    this.title = data.data.content.title
+                    this.context = data.data.content.context
+                }).catch((res) => {
+                    this.title = '网络错误'
+                    this.context = '暂无'
+                    console.log(res)
+                })
             }
 
+        },
+        created(){
+             this.activityId = 'a6721c5d-541a-487a-9bf2-8d57cd9de630'
+            this.organizationId = '011117'
+            this.showMissionContent(this.activityId);
+        },
+        mounted() {
+            this.swiperOption.autoplay = {
+                delay: 1000, //1秒切换一次
+                disableOnInteraction: false
+            }
         }
     })
 </script>
