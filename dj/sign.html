@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@1.6/lib/index.css">
+    <!-- 引入组件 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js" sync></script>
+    <script src="https://cdn.jsdelivr.net/npm/vant@1.6/lib/vant.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script	src="../js/fingerprint2.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Document</title>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html{
+            text-align: center;
+        }
+        .bg{
+            width: 100%;
+            height: 100%;
+            background-image: url("../img/yuanjiao/signIn.png");
+            background-size: 100% 100% ;
+        }
+        .van-cell-group{
+            width: 100%;
+            height: 170px;
+            position: absolute;
+            margin: 0 auto;
+            margin-top: 50%;
+            background-color: transparent;
+            border-color: transparent;
+        }
+        .van-cell{
+            font-size: 16px;
+            line-height: 30px;
+            background-color: transparent;
+        }
+        .van-button{
+            width: 80%;
+            top: 20px;
+        }
+        .van-field__control{
+            margin-left: 25px;
+        }
+        [class*=van-hairline]::after{
+            border:transparent;
+        }
+        .van-cell:not(:last-child)::after{
+            border-bottom:transparent;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="bg">
+        <van-cell-group >
+            <van-field v-model="username" label-align="right" clearable border="false" label="姓名" placeholder="请输入姓名"></van-field>
+            <van-field v-model="contact"  label-align="right" clearable border="false" label="联系方式" placeholder="请输入手机号"></van-field>
+            <van-button  id="buttonStyle" style="background-color:transparent;" type="danger" plain @click="signIn(username)"></van-button>
+        </van-cell-group>
+        
+    </div>
+   
+</body>
+<script type="text/javascript">
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                username: '',
+                contact: '',
+                type:window.location.search.split('&')[0].split('=')[1],
+            }
+        },
+        methods:{
+            init(){
+                if(this.type==0){
+                    $(".bg").css("background-image",'url("../img/yuanjiao/signIn.png")');
+                    $("#buttonStyle").text("签到");
+                }else{
+                    $(".bg").css("background-image",'url("../img/yuanjiao/signOut.png")');
+                    $("#buttonStyle").text("签退");
+                }
+            },
+            signIn(username){
+                let self = this;
+                let id = window.location.search.split("&")[3].split("=")[1];
+              /*  let videoId = window.location.search.split('&')[2].split('=')[1],
+                /!*videoId:'4a32b448-62b1-4543-99fe-d1b20b00a813',*!/
+                let organizationId = window.location.search.split('&')[1].split('=')[1],
+                /!*organizationId:'b526c2e7-ec30-439b-b298-7bed0d853db7',*!/*/
+				new Fingerprint2().get(function(result, components){
+					$.ajax({
+                    url: 'http://localhost:8762/api/identity/tVSignIn/'+id+"update",
+                    type: "post",
+                    async: false,
+                    data:{
+                        type:type,
+                        signInRecord:username,
+                    },
+                    success: function(data){
+                        if(data.success){
+                            if(self.type==0){ 
+                             vant.Toast('签到成功');
+                            }else{
+                                vant.Toast('签退成功');
+                            }
+                         }else{
+                            vant.Toast(data.message);
+                         }
+                    },
+                });
+			});
+            }
+        },
+        mounted(){
+            this.init();
+        }
+    })
+</script>
+</html>
