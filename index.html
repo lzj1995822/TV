@@ -191,7 +191,7 @@
                             this.$refs.awesomeSwiperA.swiper.slideNext();
                             break;
                         case KEY.ENTER:
-                            let index = this.$refs.awesomeSwiperA.activeIndex;
+                            let index = this.$refs.awesomeSwiperA.swiper.activeIndex;
                             let activity = this.todoList[index];
                             if (activity.taskType === 'Party') {
                                 window.location = `/party_activity_detail.html?activityId=${activity.id}&organizationId=${this.currentOrg.organizationId}&number=${this.number}`;
