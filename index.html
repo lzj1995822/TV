@@ -193,7 +193,11 @@
                         case KEY.ENTER:
                             let index = this.$refs.awesomeSwiperA.activeIndex;
                             let activity = this.todoList[index];
-                            window.location = `/party_activity_detail.html?activityId=${activity.id}&organizationId=${this.currentOrg.organizationId}`;
+                            if (activity.taskType === 'Party') {
+                                window.location = `/party_activity_detail.html?activityId=${activity.id}&organizationId=${this.currentOrg.organizationId}&number=${this.number}`;
+                            } else {
+                                window.location = `/education.html?activityId=${activity.id}&organizationId=${this.currentOrg.organizationId}&number=${this.number}`;
+                            }
                             break;
                             default:
                     }
