@@ -451,7 +451,9 @@ var vueIns = new Vue({
           window.clearInterval(this.timer);
       }
       this.$nextTick(function () {
+          console.log(task.flag, "start")
           var mp = new MediaPlayer();
+          console.log(task.flag, "zhongjian ")
           var instanceId = mp.getNativePlayerInstanceID();
           mp.setVideoDisplayMode(0);
           mp.setVideoDisplayArea(0,0,1280,720);
@@ -459,7 +461,7 @@ var vueIns = new Vue({
           mp.setVolume(10);
           mp.setSingleMedia(task.videoUrl);
           mp.playFromStart();
-
+            console.log(task.flag, "end")
           if(task.flag === 0) {
               var time = new Date().getTime();
               var z = window.setInterval(function() {
