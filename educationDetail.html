@@ -5,13 +5,13 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="js/vue.runtime.js"></script>
-	<script src="js/qrcode.min.js"></script>
+    <script src="js/qrcode.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script src="js/eruda.js"></script>
+    <!-- <script src="js/eruda.js"></script>
     <script>
         eruda.init();
-        eruda.show();
-    </script>
+        eruda.show()
+    </script> -->
     <style type="text/css">
         *{
             margin: 0;
@@ -49,15 +49,15 @@
             height:35px;
             bottom: 0;
             background-color: rgba(255, 255, 255, 0.8);
-			border-radius: 0 0 10px 10px;
+            border-radius: 0 0 10px 10px;
             font-size: 20px;
-			line-height: 35px;
+            line-height: 35px;
         }
         .viewStyle:hover{
-			box-shadow: 0px -5px 0px 0px #fff,
-                -5x 0px 0px 0px #fff,
-                5px 0px 0px 0px #fff,
-                0px 5px 0px 0px #fff;
+            box-shadow: 0px -5px 0px 0px #fff,
+            -5x 0px 0px 0px #fff,
+            5px 0px 0px 0px #fff,
+            0px 5px 0px 0px #fff;
         }
         .pageButton{
             position: absolute;
@@ -85,66 +85,66 @@
         .sign{
             width: 280px;
             height: 280px;
-			left: 50%;
-			margin-left: -160px;
-			top: 40%;
-			margin-top: -140px;
-			border: 20px solid white;
-			position: absolute;
+            left: 50%;
+            margin-left: -160px;
+            top: 40%;
+            margin-top: -140px;
+            border: 20px solid white;
+            position: absolute;
         }
-		.btn1{
-			width:151px;
-			height:55px;
-			margin: 500px auto;
-			background: url("img/yuanjiao/btn1.png");
-		}
-		.btn2{
-			width:151px;
-			height:55px;
-			margin: 500px auto;
-			background: url("img/yuanjiao/btn2.png");
-		}
-		textarea {
-			display: none;
-		}
-		.mask {
-			background: #000;
-			opacity: 0.4;  /* 透明度 */
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			width: 100%;
-			height: 100%;
-			z-index: 10;
-			border-radius: 0 0 10px 10px;
-		}
-		.play_btn {
-			background: url('img/yuanjiao/play_btn.png');
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			width: 100%;
-			height: 100%;
-			z-index: 10;
-			border-radius: 0 0 10px 10px;
-		}
+        .btn1{
+            width:151px;
+            height:55px;
+            margin: 500px auto;
+            background: url("img/yuanjiao/btn1.png");
+        }
+        .btn2{
+            width:151px;
+            height:55px;
+            margin: 500px auto;
+            background: url("img/yuanjiao/btn2.png");
+        }
+        textarea {
+            display: none;
+        }
+        .mask {
+            background: #000;
+            opacity: 0.4;  /* 透明度 */
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            border-radius: 0 0 10px 10px;
+        }
+        .play_btn {
+            background: url('img/yuanjiao/play_btn.png');
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            border-radius: 0 0 10px 10px;
+        }
     </style>
     <title>Document</title>
 </head>
 <body>
-    <div class="backGround">
-		<div id="app"></div>
-	</div>
+<div class="backGround">
+    <div id="app"></div>
+</div>
 </body>
 <script>
     var msg='';
     var time = 0;
-	 function iAlert(obj){
-            this.id="iAlert_"+Math.ceil(Math.random()*1000);
-            this.hint="";
-            this.go=undefined;
-            this.status='close';
-            this.style=
+    function iAlert(obj){
+        this.id="iAlert_"+Math.ceil(Math.random()*1000);
+        this.hint="";
+        this.go=undefined;
+        this.status='close';
+        this.style=
             {
                 backgroundColor:'white',
                 opacity:0.9,
@@ -162,7 +162,7 @@
                 // fontSize:'50px',
                 // border:'1px solid black'
             }
-            this.styleHidden=
+        this.styleHidden=
             {
                 backgroundColor:"gray",
                 opacity:0.5,
@@ -173,499 +173,466 @@
                 left:"0px",
                 top:"0px",
             }
-            this.layer=document.createElement("div");
-            this.layerHidden=document.createElement("div");
-            this.layer.id=this.id;
-            this.layerHidden.id=this.id+"_hidden";
-            this.open=function(){
-                this.layer.innerHTML=this.hint;
-                document.body.appendChild(this.layerHidden);
-                document.body.appendChild(this.layer);
-                this.status='open';
-            }
-            this.close=function(){
-                document.body.removeChild(this.layer);
-                document.body.removeChild(this.layerHidden);
-                this.status='close';
-            }
-            for(var i in this.style)
-                this.layer.style[i]=this.style[i];
-            for(var i in this.styleHidden)
-                this.layerHidden.style[i]=this.styleHidden[i];
-            for(var i in obj){
-                this[i]=obj[i];
-            }
-            for(var i in this.style){
-                this.layer.style[i]=this.style[i];
-            }
-            for(var i in this.styleHidden){
-                this.layerHidden.style[i]=this.styleHidden[i];
-            }
+        this.layer=document.createElement("div");
+        this.layerHidden=document.createElement("div");
+        this.layer.id=this.id;
+        this.layerHidden.id=this.id+"_hidden";
+        this.open=function(){
+            this.layer.innerHTML=this.hint;
+            document.body.appendChild(this.layerHidden);
+            document.body.appendChild(this.layer);
+            this.status='open';
         }
+        this.close=function(){
+            document.body.removeChild(this.layer);
+            document.body.removeChild(this.layerHidden);
+            this.status='close';
+        }
+        for(var i in this.style)
+            this.layer.style[i]=this.style[i];
+        for(var i in this.styleHidden)
+            this.layerHidden.style[i]=this.styleHidden[i];
+        for(var i in obj){
+            this[i]=obj[i];
+        }
+        for(var i in this.style){
+            this.layer.style[i]=this.style[i];
+        }
+        for(var i in this.styleHidden){
+            this.layerHidden.style[i]=this.styleHidden[i];
+        }
+    }
 
-        function showAlert(content) {
-            ia =new window.iAlert({
-                style:{
-                    minHeight:"215px",
-                    width:"43%",
-                    left:"30%",
-					fontSize: '26px'
+    function showAlert(content) {
+        ia =new window.iAlert({
+            style:{
+                minHeight:"215px",
+                width:"43%",
+                left:"30%",
+                fontSize: '26px'
+            }
+        });
+
+        ia.hint="<div style='font-size:28px;margin-top: 90px;'>" + content +"<div>";
+        ia.open();
+        alertVis = true;
+    }
+
+    function closeAlert(){
+        ia.close();
+        alertVis = false;
+    }
+    window.onload = function() {
+        setTimeout(function() {
+            history.pushState(null, null, location.href);
+            window.addEventListener('popstate', function(event) {
+                if(vueIns.seen) {
+                    vueIns.seen = false;
+                    history.pushState(null, null, location.href);
+                }else if (vueIns.vdoVisible){
+                    vueIns.vdoVisible = false;
+                    history.pushState(null, null, location.href);
+                }else if (vueIns.vdoVisible === false && vueIns.seen === false){
+                    window.clearInterval(vueIns.picTimer);
+                    location.href = document.referrer;
+                    window.removeEventListener('popstate');
                 }
-            });
-           
-            ia.hint="<div style='font-size:28px;margin-top: 90px;'>" + content +"<div>";
-            ia.open();
-			alertVis = true;
-        }
-
-		function closeAlert(){
-			ia.close();
-			alertVis = false;
-		} 
-	window.onload = function() {
-		setTimeout(function() {
-			history.pushState(null, null, location.href);
-			window.addEventListener('popstate', function(event) {
-			if(vueIns.seen) {
-				vueIns.seen = false;
-				history.pushState(null, null, location.href);
-			}else if (vueIns.vdoVisible){
-				vueIns.vdoVisible = false;
-				history.pushState(null, null, location.href);
-			}else if (vueIns.vdoVisible === false && vueIns.seen === false){
-				window.clearInterval(vueIns.picTimer);
-				location.href = document.referrer;
-				window.removeEventListener('popstate');
-			}
-		},0);
-		})
-	}
+            },0);
+        })
+    }
 </script>
 <script type="text/javascript">
-var vueIns = new Vue({
-  render: function anonymous() {
-    var _vm = this;
+    var vueIns = new Vue({
+        render: function anonymous() {
+            var _vm = this;
 
-    var _h = _vm.$createElement;
+            var _h = _vm.$createElement;
 
-    var _c = _vm._self._c || _h;
+            var _c = _vm._self._c || _h;
 
-    return _c('div', [_c('div', {
-      staticClass: "backBtn"
-    }), _vm._v(" "), _c('div', {
-      staticClass: "content"
-    }, _vm._l(_vm.list, function (task, index) {
-      return _c('div', {
-        staticClass: "viewStyle",
-		staticStyle: {
-			"background": "url('"+task.videoCover+"')",
-			"backgroundSize": "cover"
-		},
-        on: {
-          "click": function ($event) {
-                        return _vm.changeTask(task)
+            return _c('div', [_c('div', {
+                staticClass: "backBtn"
+            }), _vm._v(" "), _c('div', {
+                staticClass: "content"
+            }, _vm._l(_vm.list, function (task, index) {
+                return _c('div', {
+                    staticClass: "viewStyle",
+                    staticStyle: {
+                        "background": "url('"+task.videoCover+"')",
+                        "backgroundSize": "cover"
+                    },
+                    on: {
+                        "click": function ($event) {
+                            return _vm.changeTask(task)
+                        }
+                    },
+                    attrs: {
+                        "id": "t"+index
                     }
+                }, [_c('div', {staticClass: "viewTime"}, [_c('div', {staticStyle: {"float": "left"}}, [_vm._v(_vm._s(task.videoName))]), _vm._v(" "), (task.flag) ? _c('div', {
+                    staticStyle: {
+                        "top": "8px",
+                        "left": "4px","position":"relative",
+                        "background": "url(../img/yuanjiao/done.png)",
+                        "width": "16px",
+                        "height": "16px",
+                        "display": "inline-block"
+                    }
+                }) : _vm._e(), _vm._v(" "), _c('div', {staticStyle: {"float": "right"}}, [_vm._v(_vm._s(task.lengthOfTime))])])])
+            }), 0), _vm._v(" "),
+                _c('div', {
+                    directives: [{
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.seen,
+                        expression: "seen"
+                    }],
+                    staticStyle: {
+                        "background": "url('../img/yuanjiao/bg2.png')",
+                        "position": "absolute",
+                        "width": "1280px",
+                        "height": "720px",
+                        "z-index": "1"
+                    }
+                }, [_c('div', {
+                    staticClass: "sign",
+                    attrs: {
+                        "id": "qrcode"
+                    }
+                }), _vm._v(" "), _c('div', {
+                    class: _vm.cbtn,
+                    attrs: {
+                        "id": "confirm"
+                    },
+                    on: {
+                        "click": function click($event) {
+                            return _vm.playVideo(_vm.task);
+                        }
+                    }
+                })]), _vm._v(" "),  _c('div', {
+                    directives: [{
+                        name: "show",
+                        rawName: "v-show",
+                        value: (_vm.seen),
+                        expression: "seen"
+                    }],
+                    staticStyle: {
+                        "position": "fixed",
+                        "right": "0",
+                        "top": "400px",
+                        "z-index": "2",
+                        "width": "400px",
+                        "height": "300px",
+                        "color": "yellow",
+                        "font-size": "20px",
+                    }
+                }, [_c('div', {
+                    staticStyle: {
+                        "width": "400px",
+                        "height": "300px",
+                        "font-size": "18px"
+                    },
+                    directives: [{
+                        name: "show",
+                        rawName: "v-show",
+                        value: (_vm.cbtn === 'btn1'),
+                        expression: "cbtn === 'btn1'"
+                    }]
+                }, [_c('span', [_vm._v("已签到人员：")]), _vm._v(" "), _c('div', {
+                    staticStyle: {
+                        "display": "inline-block",
+                        "width": "200px",
+                        "height": "300px",
+                        "vertical-align": "top"
+                    }
+                }, _vm._l((_vm.signInList), function (item) {
+                    return _c('span', [_vm._v(_vm._s(item) + " ")])
+                }), 0)]), _vm._v(" "), _c('div', {
+                    directives: [{
+                        name: "show",
+                        rawName: "v-show",
+                        value: (_vm.cbtn === 'btn2'),
+                        expression: "cbtn === 'btn2'"
+                    }]
+                }, [_c('span', [_vm._v("已签退人员：")]), _vm._v(" "), _c('div', {
+                    staticStyle: {
+                        "display": "inline-block",
+                        "width": "200px",
+                        "height": "300px",
+                        "vertical-align": "top"
+                    }
+                }, _vm._l((_vm.signOutList), function (item) {
+                    return _c('span', [_vm._v(_vm._s(item) + " ")])
+                }), 0)])]), _vm._v(" "), _vm.vdoVisible ? _c('div', {
+                    staticStyle: {
+                        "width": "400px",
+                        "height": "300px",
+                        "border": "red solid 1px",
+                        "display": "none"
+                    }
+                }, [_c('video', {
+                    staticClass: "video-js vjs-default-skin",
+                    staticStyle: {
+                        "width": "400px",
+                        "height": "300px"
+                    },
+                    attrs: {
+                        "id": "myVideo",
+                        "src": _vm.task.videoUrl,
+                        "controls": "",
+                        "autoplay": "",
+                        "preload": "none"
+                    }
+                })]) : _vm._e()]);
         },
-		attrs: {
-			"id": "t"+index
-		}
-      }, [_c('div', {staticClass: "viewTime"}, [_c('div', {staticStyle: {"float": "left"}}, [_vm._v(_vm._s(task.videoName))]), _vm._v(" "), (task.flag) ? _c('div', {
-                staticStyle: {
-                    "top": "8px",
-                    "left": "4px","position":"relative",
-                    "background": "url(../img/yuanjiao/done.png)",
-                    "width": "16px",
-                    "height": "16px",
-                    "display": "inline-block"
-                }
-            }) : _vm._e(), _vm._v(" "), _c('div', {staticStyle: {"float": "right"}}, [_vm._v(_vm._s(task.lengthOfTime))])])])
-        }), 0), _vm._v(" "), 
-	_c('div', {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: _vm.seen,
-        expression: "seen"
-      }],
-      staticStyle: {
-        "background": "url('../img/yuanjiao/bg2.png')",
-        "position": "absolute",
-        "width": "1280px",
-        "height": "720px",
-        "z-index": "1"
-      }
-    }, [_c('div', {
-      staticClass: "sign",
-      attrs: {
-        "id": "qrcode"
-      }
-    }), _vm._v(" "), _c('div', {
-      class: _vm.cbtn,
-      attrs: {
-        "id": "confirm"
-      },
-      on: {
-        "click": function click($event) {
-          return _vm.playVideo(_vm.task);
-        }
-      }
-    })]), _vm._v(" "),  _c('div', {
-            directives: [{
-                name: "show",
-                rawName: "v-show",
-                value: (_vm.seen),
-                expression: "seen"
-            }],
-            staticStyle: {
-                "position": "fixed",
-                "right": "0",
-                "top": "400px",
-                "z-index": "2",
-                "width": "400px",
-                "height": "300px",
-				"color": "yellow",
-				"font-size": "20px",
-            }
-        }, [_c('div', {
-			staticStyle: {
-                "width": "400px",
-                "height": "300px",
-				"font-size": "18px"
+        data: function data() {
+            return {
+                pageSum: 1,
+                currPage: 1,
+                eachPage: 6,
+                pageBtnShow: true,
+                myPlayer: {},
+                seen: false,
+                vdoVisible: false,
+                oldTime: 0,
+                videoLength: 0,
+                player: {},
+                task: {},
+                time: '',
+                aa: {},
+                cbtn: 'btn1',
+                list: [],
+                duration: {
+                    0: 0,
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                    4: 0,
+                    5: 0
+                },
+                qrcode: null,
+                signInList: [],
+                signOutList: [],
+                timer: {},
+                picTimer: {},
+                mp: {},
+                mpInstanceId: null,
+                actingTimer: {},
+                startTime: 0
+            };
+        },
+        methods: {
+            uploadVideoRecord: function () {
+                var _this7 = this;
+                $.ajax({
+                    url: '/api/identity/tVSignIn/updateflag' + '?id=' + _this7.task.id + "&flag=1",
+                    type: "put",
+                    async: false,
+                    success: function success(data) {
+                        _this7.loadVideoList();
+                    }
+                });
             },
-            directives: [{
-                name: "show",
-                rawName: "v-show",
-                value: (_vm.cbtn === 'btn1'),
-                expression: "cbtn === 'btn1'"
-            }]
-        }, [_c('span', [_vm._v("已签到人员：")]), _vm._v(" "), _c('div', {
-            staticStyle: {
-                "display": "inline-block",
-                "width": "200px",
-                "height": "300px",
-				"vertical-align": "top"
+            init: function() {
+                document.onkeypress = grabEvent;
+                var self = this;
+                function grabEvent(event) {
+                    var keyCode = event.keyCode | event.which;
+                    self.aa = event;
+                    switch (keyCode) {
+                        case 113:
+                            break;
+                        case 114:
+                            if (self.seen) {
+                                self.seen = false;
+                            }
+                            if (self.vdoVisible) {
+                                self.vdoVisible = false;
+                            }
+                            break;
+                        case 13:
+                            if (self.seen) {
+                                if (self.cbtn == 'btn1') {
+                                    self.playVideo(self.task);
+                                } else if (self.cbtn == 'btn2') {
+                                    self.seen = false;
+                                    window.clearInterval(self.timer)
+                                }
+                            } else {
+                                self.sign();
+                            }
+                            break;
+                        case 768:
+                            // console.log(Utility.getEvent(),"tianwei");
+                            break;
+                        case 40200:
+                            // // 视频播放结束
+                            // console.log(self.mpInstanceId , self.task.flag)
+                            // if (self.mpInstanceId !== null && self.task.flag === 0) {
+                            //     self.mp.releaseMediaPlayer(self.mpInstanceId);
+                            //     self.uploadVideoRecord();
+                            //     self.showExitCode(self.task);
+                            // }
+                            break;
+                            deafult;
+                    }
+                }
+            },
+            changeTask: function(item) {
+                this.task = item;
+            },
+            sign: function() {
+                var organizationId = window.location.search.split('&')[2].split('=')[1];
+                this.task = this.list[document.activeElement.id.split("")[1]];
+                var _this = this;
+                if (this.task.flag) {
+                    this.playVideo(this.task)
+                    return;
+                }
+                this.seen = true;
+                this.$nextTick(function () {
+                    if (!_this.qrcode) {
+                        _this.initQrCode();
+                    };
+                    _this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId + "&videoId=" + _this.task.videoId + "&id=" + _this.task.id);
+                    _this.cbtn = 'btn1';
+                    _this.timer = setInterval(function () {
+                        _this.loadSignList(_this.task.videoId)
+                    }, 1500)
+                });
+            },
+            playVideo: function(task) {
+                var _this2 = this;
+                this.seen = false;
+                if (task.flag === 0) {
+                    this.initActingTimer();
+                    clearInterval(this.timer);
+                }
+                _this2.mp = new MediaPlayer();
+                _this2.mpInstanceId = _this2.mp.getNativePlayerInstanceID();
+                _this2.mp.setVideoDisplayMode(1);
+                _this2.mp.refreshVideoDisplay();
+                _this2.mp.setVolume(10);
+                _this2.mp.setSingleMedia(task.videoUrl);
+                _this2.mp.playFromStart();
+            },
+            initActingTimer: function() {
+                var _this2 = this;
+                this.startTime = new Date().getTime();
+                this.actingTimer = setInterval(function() {
+                    console.log("定时器wing");
+                    var time1 = new Date().getTime();
+                    var curTime = _this2.mp.getCurrentPlayTime();
+                    var allTime = _this2.formatSeconds(_this2.task.lengthOfTime);
+                    if ((allTime <= curTime && curTime !== 0) || (curTime === 0 && time1 - _this2.startTime > 5)) {
+                        _this2.mp.releaseMediaPlayer(_this2.mpInstanceId);
+                        _this2.uploadVideoRecord();
+                        _this2.showExitCode(_this2.task);
+                        clearInterval(_this2.actingTimer);
+                    }
+                },2000)
+            },
+            initQrCode: function() {
+                this.qrcode = new QRCode('qrcode', {
+                    width: 280,
+                    height: 280,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    typeNumber: 4,
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+            },
+            showExitCode: function(item) {
+                var _this3 = this;
+                this.vdoVisible = false;
+                var organizationId = window.location.search.split('&')[2].split('=')[1];
+                this.seen = true;
+                this.cbtn = 'btn2';
+                this.$nextTick(function () {
+                    var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId + "&videoId=" + item.videoId + "&id=" + item.id;
+                    this.qrcode.makeCode(str);
+                    _this3.timer = setInterval(function () {
+                        _this3.loadSignList(item.videoId)
+                    }, 1500)
+                });
+            },
+            loadVideoList: function() {
+                var self = this;
+                var activityId = window.location.search.split('&')[1].split('=')[1];
+                var districtId = window.location.search.split('&')[2].split('=')[1];
+                $.ajax({
+                    url: '/api/identity/tVSignIn/list',
+                    type: "post",
+                    async: false,
+                    contentType: 'application/json',
+                    processData: true,
+                    data: JSON.stringify({
+                        activityId: activityId,
+                        organizationId: districtId,
+                    }),
+                    success: function success(data) {
+                        self.list = data.content;
+                        self.task = data.content[0];
+                        self.$nextTick(function () {
+                            $('.viewStyle').hover(function () {
+                                $(this).append('<div id="mask" class="mask"><div class="play_btn"></div></div>')
+                            }, function () {
+                                $('#mask').remove();
+                            })
+                        })
+                    }
+                });
+            },
+            loadSignList: function (videoId) {
+                var activityId = window.location.search.split('&')[1].split('=')[1];
+                var districtId = window.location.search.split('&')[2].split('=')[1];
+                var self = this;
+                $.ajax({
+                    url: '/api/identity/tVSignIn/list',
+                    type: "post",
+                    async: false,
+                    contentType: 'application/json',
+                    processData: true,
+                    data: JSON.stringify({
+                        videoId: videoId,
+                        organizationId: districtId,
+                        activityId: activityId,
+                    }),
+                    success: function (data) {
+                        let temp = data.content[0];
+                        self.signInList = temp.signInRecord ? temp.signInRecord.split(" ") : '';
+                        self.signOutList = temp.signOutRecord ? temp.signOutRecord.split(" ") : '';
+                    }
+                });
+            },
+            formatSeconds: function (value) {
+                if (value) {
+                    return Number(value.split(":")[0]) * 3600 + Number(value.split(":")[1]) * 60 + Number(value.split(":")[2])
+                } else {
+                    return 0
+                }
             }
-        }, _vm._l((_vm.signInList), function (item) {
-            return _c('span', [_vm._v(_vm._s(item) + " ")])
-        }), 0)]), _vm._v(" "), _c('div', {
-            directives: [{
-                name: "show",
-                rawName: "v-show",
-                value: (_vm.cbtn === 'btn2'),
-                expression: "cbtn === 'btn2'"
-            }]
-        }, [_c('span', [_vm._v("已签退人员：")]), _vm._v(" "), _c('div', {
-            staticStyle: {
-                "display": "inline-block",
-                "width": "200px",
-                "height": "300px",
-				"vertical-align": "top"
-            }
-        }, _vm._l((_vm.signOutList), function (item) {
-            return _c('span', [_vm._v(_vm._s(item) + " ")])
-        }), 0)])]), _vm._v(" "), _vm.vdoVisible ? _c('div', {
-      staticStyle: {
-        "width": "400px",
-        "height": "300px",
-        "border": "red solid 1px",
-        "display": "none"
-      }
-    }, [_c('video', {
-      staticClass: "video-js vjs-default-skin",
-      staticStyle: {
-        "width": "400px",
-        "height": "300px"
-      },
-      attrs: {
-        "id": "myVideo",
-        "src": _vm.task.videoUrl,
-        "controls": "",
-        "autoplay": "",
-        "preload": "none"
-      }
-    })]) : _vm._e()]);
-  },
-  data: function data() {
-    return {
-      pageSum: 1,
-      currPage: 1,
-      eachPage: 6,
-      pageBtnShow: true,
-      myPlayer: {},
-      seen: false,
-      vdoVisible: false,
-      oldTime: 0,
-      videoLength: 0,
-      player: {},
-      task: {},
-      time: '',
-      aa: {},
-      cbtn: 'btn1',
-      list: [],
-	  duration: {
-		0: 0,
-		1: 0,
-		2: 0,
-		3: 0,
-		4: 0,
-		5: 0
-	  },
-      qrcode: null,
-	  signInList: [],
-      signOutList: [],
-      timer: {},
-	  picTimer: {},
-        mp:{},
-        mpInstanceId: null,
-        actingTimer: {}
-    };
-  },
-  methods: {
-    changeTask: function changeTask(item) {
-      this.task = item;
-    },
-    pageShow: function pageShow() {
-      this.pageSum = Math.ceil(this.list.length / this.eachPage);
-    },
-    sign: function sign() {
-		var organizationId = window.location.search.split('&')[2].split('=')[1];
-        this.task = this.list[document.activeElement.id.split("")[1]];
-		var _this = this;
-		if(this.task.flag) {
-			this.playVideo(this.task)
-			return;
-		}
-		this.seen = true;
-		this.$nextTick(function () {
-			if (!_this.qrcode) {
-			  _this.initQrCode();
-			};
-			_this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId +"&videoId="+ _this.task.videoId +"&id="+  _this.task.id);
-			_this.cbtn = 'btn1';
-			_this.timer = setInterval(function() {
-				_this.loadSignList(_this.task.videoId)
-			}, 1500)
-		});
-    },
-    playVideo: function playVideo(task) {
-      var _this2 = this;
-      this.seen = false;
-      this.vdoVisible = true;
-      if (task.flag === 0) {
-          window.clearInterval(this.timer);
-      }
-      this.$nextTick(function () {
-          _this2.mp = new MediaPlayer();
-          _this2.mpInstanceId = _this2.mp.getNativePlayerInstanceID();
-          _this2.mp.setVideoDisplayMode(1);
-          _this2.mp.refreshVideoDisplay();
-          _this2.mp.setVolume(10);
-          _this2.mp.setSingleMedia(task.videoUrl);
-          _this2.mp.playFromStart();
-      });
-    var time = new Date().getTime();
-    setInterval(function () {
-        console.log(123123)
-    },2000)
-    this.actingTimer = setInterval(function() {
-        console.log("定時器");
-        var time1 = new Date().getTime();
-        var curTime = _this2.mp.getCurrentPlayTime();
-        var allTime = _this2.formatSeconds(task.lengthOfTime);
-        if((allTime <= curTime && curTime !== 0)||(curTime === 0 && time1 > time)){
-            _this2.mp.releaseMediaPlayer(_this2.mpInstanceId);
-            _this2.uploadVideoRecord();
-            _this2.showExitCode(task);
-            console.log("结束执行");
-            clearInterval(_this2.actingTimer);
+        },
+        mounted: function mounted() {
+            this.init();
+            this.loadVideoList();
+            var number = window.location.search.split('&')[0].split('=')[1];
+            var activityId = window.location.search.split('&')[1].split('=')[1];
+            var districtId = window.location.search.split('&')[2].split('=')[1];
+            this.picTimer = setInterval(function () {
+                $.ajax({
+                    url: '/api/identity/easyNVR/number',
+                    type: "GET",
+                    async: false,
+                    contentType: 'application/json',
+                    data: {
+                        number: number,
+                        activityId: activityId,
+                        organizationId: districtId,
+                    }
+                })
+            }, 30000)
         }
-    },2000);
-    },
-	uploadVideoRecord: function() {
-		var _this7 = this;
-		$.ajax({
-            url: '/api/identity/tVSignIn/updateflag'+'?id='+_this7.task.id+"&flag=1",
-			type: "put",
-			async: false,
-			success: function success(data) {
-				_this7.loadVideoList();
-			  }
-		});
-	},
-    init: function init() {
-      document.onkeypress = grabEvent;
-      
-      var self = this;
-      
-      function grabEvent(event) {
-        var keyCode = event.keyCode | event.which;
-        self.aa = event;
-        switch (keyCode) {
-          case 113:
-            break;
-          case 114:
-            if (self.seen) {
-              self.seen = false;
-            }
-            if (self.vdoVisible) {
-              self.vdoVisible = false;
-            }
-            break;
-          case 13:
-            if (self.seen) {
-              if (self.cbtn == 'btn1') {
-                self.playVideo(self.task);
-              } else if (self.cbtn == 'btn2') {
-                self.seen = false;
-				window.clearInterval(self.timer)
-              }
-            } else {
-              self.sign();
-            }
-            break;
-            case 768:
-                // console.log(Utility.getEvent(),"tianwei");
-                break;
-            case 40200:
-                // // 视频播放结束
-                // console.log(self.mpInstanceId , self.task.flag)
-                // if (self.mpInstanceId !== null && self.task.flag === 0) {
-                //     self.mp.releaseMediaPlayer(self.mpInstanceId);
-                //     self.uploadVideoRecord();
-                //     self.showExitCode(self.task);
-                // }
-                break;
-            deafult;
-        }
-      }
-    },
-    initQrCode: function initQrCode() {
-      this.qrcode = new QRCode('qrcode', {
-        width: 280,
-        height: 280,
-        colorDark: '#000000',
-        colorLight: '#ffffff',
-		typeNumber: 4,
-        correctLevel: QRCode.CorrectLevel.L
-      });
-    },
-    showExitCode: function showExitCode(item) {
-      var _this3 = this;
-      this.vdoVisible = false;
-      var organizationId = window.location.search.split('&')[2].split('=')[1];
-      this.seen = true;
-      this.cbtn = 'btn2';
-      this.$nextTick(function () {
-		  var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId +"&videoId="+ item.videoId +"&id="+item.id;
-		this.qrcode.makeCode(str);
-		_this3.timer = setInterval(function() {
-				_this3.loadSignList(item.videoId)
-			}, 1500)
-      });
-    },
-    loadVideoList: function loadVideoList() {
-      var self = this;
-      var activityId = window.location.search.split('&')[1].split('=')[1];
-	  var districtId = window.location.search.split('&')[2].split('=')[1];
-      $.ajax({
-        url: '/api/identity/tVSignIn/list',
-        type: "post",
-        async: false,
-        contentType:'application/json',
-        processData:true,
-        data: JSON.stringify({
-          activityId: activityId,
-          organizationId:districtId,
-        }),
-        success: function success(data) {
-			self.list = data.content;
-            self.task = data.content[0];
-			self.$nextTick(function() {
-				$('.viewStyle').hover(function(){
-					$(this).append('<div id="mask" class="mask"><div class="play_btn"></div></div>')
-				},function(){
-					$('#mask').remove();
-				})
-			})
-          }
-		});
-    },
-	loadSignList: function (videoId) {
-        var activityId = window.location.search.split('&')[1].split('=')[1];
-        var districtId = window.location.search.split('&')[2].split('=')[1];
-		var self = this;
-		$.ajax({
-			url: '/api/identity/tVSignIn/list',
-			type: "post",
-            async: false,
-            contentType:'application/json',
-            processData:true,
-			data: JSON.stringify({
-				videoId: videoId,
-				organizationId: districtId,
-                activityId:activityId,
-			}),
-			success: function (data) {
-			    let temp = data.content[0];
-				self.signInList = temp.signInRecord ? temp.signInRecord.split(" ") : '';
-				self.signOutList = temp.signOutRecord ? temp.signOutRecord.split(" ") : '';
-			}
-		});
-	},
-	/*formatSeconds: function formatSeconds(value) {
-		var secondTime = parseInt(value);// 秒
-		var minuteTime = 0;// 分
-		var hourTime = 0;// 小时
-		if(secondTime > 60) {//如果秒数大于60，将秒数转换成整数
-			//获取分钟，除以60取整数，得到整数分钟
-			minuteTime = parseInt(secondTime / 60);
-			//获取秒数，秒数取佘，得到整数秒数
-			secondTime = parseInt(secondTime % 60);
-			//如果分钟大于60，将分钟转换成小时
-			if(minuteTime > 60) {
-				//获取小时，获取分钟除以60，得到整数小时
-				hourTime = parseInt(minuteTime / 60);
-				//获取小时后取佘的分，获取分钟除以60取佘的分
-				minuteTime = parseInt(minuteTime % 60);
-			}
-		}
-		var result = "0:0:" + parseInt(secondTime) ;
-
-		if(minuteTime > 0) {
-			result = "0:" + parseInt(minuteTime) + ":" + parseInt(secondTime);
-		}
-		if(hourTime > 0) {
-			result = "" + parseInt(hourTime) + ":" + parseInt(minuteTime) + ":" + parseInt(secondTime);
-		}
-		return result;
-	},
-*/
-      formatSeconds: function formatSeconds(value){
-          if(value){
-              return Number(value.split(":")[0])*3600+Number(value.split(":")[1])*60+Number(value.split(":")[2])
-          }
-
-      }
-  },
-  mounted: function mounted() {
-    this.init();
-    this.loadVideoList();
-	var number = window.location.search.split('&')[0].split('=')[1];
-	var activityId = window.location.search.split('&')[1].split('=')[1];
-    var districtId = window.location.search.split('&')[2].split('=')[1];
-	this.picTimer = setInterval(function() {
-            $.ajax({
-                url: '/api/identity/easyNVR/number',
-                type: "GET",
-                async: false,
-                contentType:'application/json',
-                data:{
-                    number:number,
-                    activityId:activityId,
-                    organizationId:districtId,
-                }})
-        },30000)
-	}
-}).$mount('#app');
+    }).$mount('#app');
 </script>
 </html>
