@@ -451,47 +451,36 @@ var vueIns = new Vue({
           window.clearInterval(this.timer);
       }
       this.$nextTick(function () {
-        var mp = new MediaPlayer();
-        var instanceId = mp.getNativePlayerInstanceID(); 
-		mp.setVideoDisplayMode(0);
-		mp.setVideoDisplayArea(0,0,1280,720);
-		mp.refreshVideoDisplay();
-        mp.setVolume(10);
-        mp.setSingleMedia(task.videoUrl);
-        mp.playFromStart();
-        if(task.flag === 1) {
-            return;
+        if(task.flag === 0) {
+            var time = new Date().getTime();
+            var z = setInterval(function() {
+                var time1 = new Date().getTime();
+                var curTime = mp.getCurrentPlayTime();
+                var allTime = _this2.formatSeconds(task.lengthOfTime);
+                showAlert("sdsds,播放1结束", curTime, allTime);
+                if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
+                    showAlert("sdsds,播放结2束")
+                    clearInterval(z);
+                    mp.releaseMediaPlayer(instanceId);
+                    _this2.uploadVideoRecord();
+                    _this2.showExitCode(task);
+                }
+            },2000);
         }
-        var time = new Date().getTime();
-        var z = setInterval(function() {
-            var time1 = new Date().getTime();
-            var curTime = mp.getCurrentPlayTime();
-            var allTime = _this2.formatSeconds(task.lengthOfTime);
-            showAlert("sdsds,播放1结束", curTime);
-            if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
-                showAlert("sdsds,播放结2束")
-                clearInterval(z);
-                mp.releaseMediaPlayer(instanceId);
-                _this2.uploadVideoRecord();
-                _this2.showExitCode(task);
-            }
-        },2000);
-     //   _this2.player = document.getElementById('myVideo');
-
-    //  //   _this2.player.play();
-    //     _this2.player.addEventListener('ended', function (e) {
-	// 		_this2.showExitCode(task);
-	// 		_this2.uploadVideoRecord();
-    //     });
-	// 	_this2.player.addEventListener('pause', function (e) {
-	// 	 _this2.vdoVisible = false;
-    //     });
+          var mp = new MediaPlayer();
+          var instanceId = mp.getNativePlayerInstanceID();
+          mp.setVideoDisplayMode(0);
+          mp.setVideoDisplayArea(0,0,1280,720);
+          mp.refreshVideoDisplay();
+          mp.setVolume(10);
+          mp.setSingleMedia(task.videoUrl);
+          mp.playFromStart();
       });
     },
 	uploadVideoRecord: function() {
 		var _this7 = this;
 		$.ajax({
-            url: '/api/identity//tVSignIn/updateflag'+'?id='+_this7.task.id+"&flag=1",
+            url: '/api/identity/tVSignIn/updateflag'+'?id='+_this7.task.id+"&flag=1",
 			type: "get",
 			async: false,
 			success: function success(data) {
