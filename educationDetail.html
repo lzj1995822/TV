@@ -495,7 +495,7 @@ var vueIns = new Vue({
       
       function keyDown(evt) {
         evt = evt ? evt : window.event ? window.event : ""; //兼容IE和Firefox获得keyBoardEvent对象
-        console.log(evt.toString());
+        console.log(evt.keyCode, "keyCode");
           console.log(Utility.getEvent());
         var keyCode = evt.keyCode ? evt.keyCode : evt.which;
         self.aa = evt;
