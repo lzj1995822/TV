@@ -514,7 +514,7 @@ var vueIns = new Vue({
                 if (self.mpInstanceId !== null && self.task.flag === 0) {
                     self.mp.releaseMediaPlayer(self.mpInstanceId);
                     self.uploadVideoRecord();
-                    self.showExitCode(task);
+                    self.showExitCode(self.task);
                 }
                 break;
             deafult;
