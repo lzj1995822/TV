@@ -425,7 +425,7 @@ var vueIns = new Vue({
     },
     sign: function sign() {
 		var organizationId = window.location.search.split('&')[2].split('=')[1];
-        this.task = this.list[1];
+        this.task = this.list[document.activeElement.id.split("")[1]];
 		var _this = this;
 		if(this.task.flag) {
 			this.playVideo(this.task)
