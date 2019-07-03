@@ -414,7 +414,9 @@ var vueIns = new Vue({
 	  signInList: [],
       signOutList: [],
       timer: {},
-	  picTimer: {}
+	  picTimer: {},
+        mp:{},
+        mpInstanceId: null
     };
   },
   methods: {
@@ -452,29 +454,13 @@ var vueIns = new Vue({
           window.clearInterval(this.timer);
       }
       this.$nextTick(function () {
-          var mp = new MediaPlayer();
-          var instanceId = mp.getNativePlayerInstanceID();
-          mp.setVideoDisplayMode(1);
-          mp.refreshVideoDisplay();
-          mp.setVolume(10);
-          mp.setSingleMedia(task.videoUrl);
-          mp.playFromStart();
-          if(task.flag === 0) {
-              var time = new Date().getTime();
-              var z = DVB.addTimer(2000, 2, "intervalAct(time)");
-          }
-          function intervalAct(time) {
-              var time1 = new Date().getTime();
-              var curTime = mp.getCurrentPlayTime();
-              var allTime = _this2.formatSeconds(task.lengthOfTime);
-              if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
-                  mp.releaseMediaPlayer(instanceId);
-                  _this2.uploadVideoRecord();
-                  _this2.showExitCode(task);
-                  console.log("结束执行");
-                  DVB.removeTimer(z);
-              }
-          }
+          _this2.mp = new MediaPlayer();
+          _this2.mpInstanceId = _this2.mp.getNativePlayerInstanceID();
+          _this2.mp.setVideoDisplayMode(1);
+          _this2.mp.refreshVideoDisplay();
+          _this2.mp.setVolume(10);
+          _this2.mp.setSingleMedia(task.videoUrl);
+          _this2.mp.playFromStart();
       });
     },
 	uploadVideoRecord: function() {
@@ -499,11 +485,9 @@ var vueIns = new Vue({
           console.log(Utility.getEvent());
         var keyCode = evt.keyCode ? evt.keyCode : evt.which;
         self.aa = evt;
-
         switch (keyCode) {
           case 113:
             break;
-
           case 114:
             if (self.seen) {
               self.seen = false;
@@ -512,7 +496,6 @@ var vueIns = new Vue({
               self.vdoVisible = false;
             }
             break;
-
           case 13:
             if (self.seen) {
               if (self.cbtn == 'btn1') {
@@ -524,16 +507,17 @@ var vueIns = new Vue({
             } else {
               self.sign();
             }
-
             break;
+            case 40200:
+                // 视频播放结束
+                if (self.mpInstanceId && self.task.flag === 0) {
+                    self.mp.releaseMediaPlayer();
+                    self.uploadVideoRecord();
+                    self.showExitCode(task);
+                }
+                break;
             deafult;
         }
-      }
-      function keyPress(evt){
-          evt = evt ? evt : window.event;
-          evt.which = evt.which ? evt.which : evt.keyCode;
-          showAlert(evt.which+Utility.getEvent());
-         
       }
     },
     initQrCode: function initQrCode() {
