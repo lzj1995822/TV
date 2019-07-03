@@ -462,6 +462,19 @@ var vueIns = new Vue({
           _this2.mp.setSingleMedia(task.videoUrl);
           _this2.mp.playFromStart();
       });
+    // var time = new Date().getTime();
+    // var z = window.setInterval(function() {
+    //     var time1 = new Date().getTime();
+    //     var curTime = _this2.mp.getCurrentPlayTime();
+    //     var allTime = _this2.formatSeconds(task.lengthOfTime);
+    //     if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
+    //         _this2.mp.releaseMediaPlayer(instanceId);
+    //         _this2.uploadVideoRecord();
+    //         _this2.showExitCode(task);
+    //         console.log("结束执行");
+    //         clearInterval(z);
+    //     }
+    // },2000);
     },
 	uploadVideoRecord: function() {
 		var _this7 = this;
@@ -475,16 +488,13 @@ var vueIns = new Vue({
 		});
 	},
     init: function init() {
-      document.onkeypress = keyDown;
+      document.onkeypress = grabEvent;
       
       var self = this;
       
-      function keyDown(evt) {
-        evt = evt ? evt : window.event ? window.event : ""; //兼容IE和Firefox获得keyBoardEvent对象
-        console.log(evt.keyCode, "keyCode");
-          console.log(Utility.getEvent());
-        var keyCode = evt.keyCode ? evt.keyCode : evt.which;
-        self.aa = evt;
+      function grabEvent(event) {
+        var keyCode = event.keyCode | event.which;
+        self.aa = event;
         switch (keyCode) {
           case 113:
             break;
@@ -635,9 +645,6 @@ var vueIns = new Vue({
   mounted: function mounted() {
     this.init();
     this.loadVideoList();
-      setInterval(function() {
-          console.log("定時器")
-      },2000);
 	var number = window.location.search.split('&')[0].split('=')[1];
 	var activityId = window.location.search.split('&')[1].split('=')[1];
     var districtId = window.location.search.split('&')[2].split('=')[1];
