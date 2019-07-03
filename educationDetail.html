@@ -7,6 +7,7 @@
     <script src="js/vue.runtime.js"></script>
     <script src="js/qrcode.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
+    <script src="lib/player.js"></script>
     <!-- <script src="js/eruda.js"></script>
     <script>
         eruda.init();
@@ -133,6 +134,7 @@
 </head>
 <body>
 <div class="backGround">
+    <div class="debug"></div>
     <div id="app"></div>
 </div>
 </body>
@@ -508,13 +510,21 @@
                     this.initActingTimer();
                     clearInterval(this.timer);
                 }
-                _this2.mp = new MediaPlayer();
-                _this2.mpInstanceId = _this2.mp.getNativePlayerInstanceID();
-                _this2.mp.setVideoDisplayMode(1);
-                _this2.mp.refreshVideoDisplay();
-                _this2.mp.setVolume(10);
-                _this2.mp.setSingleMedia(task.videoUrl);
-                _this2.mp.playFromStart();
+                playSmall( {
+                    url: task.videoUrl,
+                    width: 572,
+                    height: 325,
+                    left: 60,
+                    top: 129
+                })
+
+                // _this2.mp = new MediaPlayer();
+                // _this2.mpInstanceId = _this2.mp.getNativePlayerInstanceID();
+                // _this2.mp.setVideoDisplayMode(1);
+                // _this2.mp.refreshVideoDisplay();
+                // _this2.mp.setVolume(10);
+                // _this2.mp.setSingleMedia(task.videoUrl);
+                // _this2.mp.playFromStart();
             },
             initActingTimer: function() {
                 var _this2 = this;
