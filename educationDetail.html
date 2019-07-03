@@ -511,7 +511,7 @@ var vueIns = new Vue({
             case 40200:
                 // 视频播放结束
                 console.log(self.mpInstanceId , self.task.flag)
-                if (self.mpInstanceId && self.task.flag === 0) {
+                if (self.mpInstanceId !== null && self.task.flag === 0) {
                     self.mp.releaseMediaPlayer(self.mpInstanceId);
                     self.uploadVideoRecord();
                     self.showExitCode(task);
