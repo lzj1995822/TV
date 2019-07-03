@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>任务执行</title>
     <script src="lib/vue.min.js"></script>
     <script src="lib/axios.min.js"></script>
     <script src="js/api.js"></script>
@@ -66,6 +66,7 @@
             height: 73px;
             position: absolute;
         }
+
         /*按钮浮动*/
         .btnPosition:hover {
 
@@ -74,23 +75,23 @@
         /*任务名*/
         .title {
             position: absolute;
-            margin-top: 275px;
-            margin-left: 1093px;
+            margin-top: 270px;
+            margin-left: 1106px;
             height: 61px;
-            font-size: 35px;
+            font-size: 36px;
             color: white;
         }
 
         /*任务详情*/
         .content {
             letter-spacing: 1px;
-            line-height: 160%;
+            line-height: 193%;
             text-indent: 50px;
             position: absolute;
-            margin-top: 361px;
-            margin-left: 1093px;
+            margin-top: 366px;
+            margin-left: 1106px;
             width: 628px;
-            font-size: 25px;
+            font-size: 30px;
             color: white;
         }
 
@@ -124,13 +125,14 @@
             left: 54px;
         }
 
-        .swiper-slide-active {
-            transition: all 1s;
-            transform: scale(1.2) !important;
-        }
+        /*.swiper-slide-active {*/
+            /*transition: all 1s;*/
+            /*transform: scale(1.2) !important;*/
+        /*}*/
 
         .swiper-slide-active .picListStyle {
         }
+
         .unselectable {
             -moz-user-select: -moz-none;
             -khtml-user-select: none;
@@ -138,6 +140,21 @@
             -o-user-select: none;
             user-select: none;
         }
+        .overLoad {
+            background-color:white;
+            opacity:0.9;
+            position:fixed;
+            z-index:9;
+            width:650px;
+            font-size: 35px;
+            height:400px;
+            left:635px;
+            top:340px;
+            border-radius:12px;
+            text-align:center;
+            line-height: 400px;
+        }
+
     </style>
 </head>
 <body>
@@ -170,8 +187,11 @@
     <div class="content">
         {{context}}
     </div>
-    <button @click="execute(message)"  class="btnPosition" style="background-color:transparent;z-index: 2;border: 0px"></button>
+    <button @click="execute(message)" class="btnPosition"
+            style="background-color:transparent;z-index: 2;border: 0px"></button>
     <img :src="btnImg" class="btnPosition" style="z-index: 1">
+
+    <div class="overLoad" v-if="showOverLoad">{{loadMsg}}</div>
 </div>
 
 <script>
@@ -180,8 +200,8 @@
         el: '#bgMeeting',
         data() {
             return {
-                activityId:'',
-                organizationId:'',
+                activityId: '',
+                organizationId: '',
                 title: '',
                 context: '',
                 message: '开始会议',
@@ -221,17 +241,27 @@
                 //闪烁点图片
                 exexuteImg: 'img/party_activity_detail/execute.png',
                 //按钮图片
-                btnImg:'img/party_activity_detail/begin.png',
+                btnImg: 'img/party_activity_detail/begin.png',
                 //闪烁点定时器
                 shanShuoTime: {},
                 //截图定时器
                 timer: {},
-                numbers:''
+                numbers: '',
+                showOverLoad:false,
+                loadMsg:'执行成功，即将转到任务列表页面'
             }
         },
         methods: {
             execute(msg) {
                 clearInterval(this.timer); // 防止多次点击开启多个定时器.
+                if(this.title == '无数据'|| this.title =='网络错误'){
+                    this.loadMsg = '暂无活动信息，请返回任务列表页面'
+                    this.showOverLoad = true
+                    setTimeout(()=>{
+                        this.showOverLoad = false
+                    },1500)
+                    return;
+                }
 
                 if (msg === '开始会议') {
                     //执行按钮变换
@@ -265,7 +295,11 @@
                     activityId: this.activityId,
                     organizationId: this.organizationId
                 }).then((data) => {
-
+                    this.loadMsg='执行成功，即将转到任务列表页面'
+                    this.showOverLoad = true
+                    setTimeout(()=>{
+                        window.location = `/index.html`
+                    },1000)
                 })
 
             },
@@ -313,9 +347,13 @@
             showMissionContent(activityId) {
                 let path = `identity/parActivity/${activityId}id`
                 this.$http.get(path).then((data) => {
-                    console.log(data)
-                    this.title = data.data.content.title
-                    this.context = data.data.content.context
+                    if(data.data.content){
+                        this.title = data.data.content.title
+                        this.context = data.data.content.context
+                    }else {
+                        this.title = '无数据'
+                         this.context = '该活动暂无信息'
+                    }
                 }).catch((res) => {
                     this.title = '网络错误'
                     this.context = '暂无'
@@ -327,25 +365,56 @@
                 let url = window.location.href
                 let path = url.split('?')[1]
                 let params = path.split('&')
-                params.forEach((item)=>{
-                    let pos=item.indexOf('=');//查找name=value
-                    if(pos==-1){//如果没有找到就跳过
+                params.forEach((item) => {
+                    let pos = item.indexOf('=');//查找name=value
+                    if (pos == -1) {//如果没有找到就跳过
                         return
                     }
-                    let argname=item.substring(0,pos);//提取name
-                    let value=item.substring(pos+1);//提取value
+                    let argname = item.substring(0, pos);//提取name
+                    let value = item.substring(pos + 1);//提取value
                     args[argname] = value;//存为属性
                 })
-              return args
+                return args
+            },
+            init() {
+                let KEY = {
+                    UP: 28,
+                    DOWN: 29,
+                    LEFT: 30,
+                    RIGHT: 31,
+                    PC_UP:38,
+                    PC_DOWN:40,
+                    PC_LEFT:37,
+                    PC_RIGHT:39,
+                    ENTER: 13,
+                    BACK: 114,
+                    EXIT: 61
+                };
+                let keyDown = (evt) => {
+                    console.log(this.$refs.awesomeSwiperA);
+                    evt = (evt) ? evt : ((window.event) ? window.event : "");//兼容IE和Firefox获得keyBoardEvent对象
+                    let keyCode = evt.keyCode ? evt.keyCode : evt.which;
+                    switch (keyCode) {
+                        case KEY.BACK:
+                        case KEY.PC_LEFT:
+                            window.location = `/index.html`
+                            break;
+                        default:
+                    }
+                    return false;
+                };
+                document.onirkeypress = keyDown;
+                document.onkeydown = keyDown;
             }
 
         },
-        created(){
+        created() {
             let Str = this.GetQueryString()
-            this.numbers= Str.number
-             this.activityId = Str.activityId
+            this.numbers = Str.number
+            this.activityId = Str.activityId
             this.organizationId = Str.organizationId
             this.showMissionContent(this.activityId);
+            this.init();
         },
         mounted() {
             this.swiperOption.autoplay = {
