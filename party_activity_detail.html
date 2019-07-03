@@ -78,23 +78,33 @@
             margin-top: 270px;
             margin-left: 1106px;
             height: 61px;
-            font-size: 36px;
+            font-size: 30px;
             color: white;
+            width:1000px;
+            font-weight: bold;
         }
 
         /*任务详情*/
         .content {
             letter-spacing: 1px;
             line-height: 193%;
-            text-indent: 50px;
+            position: absolute;
+            margin-top: 412px;
+            margin-left: 1106px;
+            width: 628px;
+            font-size: 30px;
+            color: white;
+            font-weight: bold;
+        }
+        .taskType{
             position: absolute;
             margin-top: 366px;
             margin-left: 1106px;
             width: 628px;
             font-size: 30px;
             color: white;
+            font-weight: bold;
         }
-
         .nowPic {
             width: 100%;
             height: 100%;
@@ -105,6 +115,10 @@
             margin-top: 13px;
             width: 100%;
             height: 100%;
+            overflow: hidden;
+            border: 2px solid white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), 0 0 80px rgba(0, 0, 0, 0.06) inset;
+            border-radius: 1px;
         }
 
         /*任务框*/
@@ -130,8 +144,8 @@
             /*transform: scale(1.2) !important;*/
         /*}*/
 
-        .swiper-slide-active .picListStyle {
-        }
+        /*.swiper-slide-active .picListStyle {*/
+        /*}*/
 
         .unselectable {
             -moz-user-select: -moz-none;
@@ -153,6 +167,12 @@
             border-radius:12px;
             text-align:center;
             line-height: 400px;
+        }
+        .warp {
+            overflow: hidden;
+            background-image: linear-gradient(-45deg, #2E6AC1, #4463B7, #3D58B2);
+            border: 1px solid #007aff7d;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.27), 0 0 80px rgba(0, 0, 0, 0.06) inset;;
         }
 
     </style>
@@ -178,12 +198,11 @@
 
     </div>
     <div class="bottomLeft">
-        <a style="color: white;margin: auto;font-size: 30px;font-weight:500">选择,按 <img
-                src="img/party_activity_detail/continue.png" style="width: 45px;vertical-align:middle"> 执行,按 <img
-                src="img/party_activity_detail/back.png" style="width: 45px;vertical-align:middle"> 返回</a>
+        <img src="img/yuanjiao/back.png">
     </div>
     <img src="img/party_activity_detail/mission.png" class="mission">
     <h class="title">{{title}}</h>
+    <div class="taskType">任务类型：党建任务</div>
     <div class="content">
         {{context}}
     </div>
@@ -248,7 +267,9 @@
                 timer: {},
                 numbers: '',
                 showOverLoad:false,
-                loadMsg:'执行成功，即将转到任务列表页面'
+                loadMsg:'执行成功，即将转到任务列表页面',
+                //判断是否点击结束执行
+                overFlag:0
             }
         },
         methods: {
@@ -262,30 +283,40 @@
                     },1500)
                     return;
                 }
-
-                if (msg === '开始会议') {
-                    //执行按钮变换
-                    let path = 'identity/parActivityObject/execute'
-                    this.$http.post(path, {
-                        activityId: this.activityId,
-                        organizationId: this.organizationId
-                    }).then((response) => {
-                        this.btnImg = 'img/party_activity_detail/over.png'
-                        this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
-
-                        this.timer = window.setInterval(() => {
+                //测试摄像头是否可用
+                let path = `identity/easyNVR/number?number=${this.numbers}&activityId=${this.activityId}&organizationId=${this.organizationId}`
+                this.$http.get(path).then((response) => {
+                    if (msg == '开始会议') {
+                        this.overFlag = 1
+                        //执行按钮变换
+                        let path = 'identity/parActivityObject/execute'
+                        this.$http.post(path, {
+                            activityId: this.activityId,
+                            organizationId: this.organizationId
+                        }).then((response) => {
+                            this.btnImg = 'img/party_activity_detail/over.png'
                             this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
-                        }, 10000);
-                        this.message = '结束会议'
-                        //执行标志闪烁
-                        this.imgShanshuo()
-                    }).catch((error) => {
-                        alert('执行任务失败，请检查网络' + error)
-                    });
 
-                } else {
-                    this.executeOver();
-                }
+                            this.timer = window.setInterval(() => {
+                                this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
+                            }, 10000);
+                            this.message = '结束会议'
+                        }).catch((error) => {
+                            alert('执行任务失败，请检查网络' + error)
+                        });
+                    } else {
+                        this.executeOver();
+                    }
+
+                }).catch(()=>{
+                    this.loadMsg = '摄像头连接错误，请返回任务列表页面'
+                this.showOverLoad = true
+                setTimeout(()=>{
+                    this.showOverLoad = false
+                         },1500)
+                    return;
+                     }
+                )
             },
             executeOver() {
                 clearInterval(this.timer); // 防止多次点击开启多个定时器.
@@ -295,11 +326,18 @@
                     activityId: this.activityId,
                     organizationId: this.organizationId
                 }).then((data) => {
+                    this.overFlag = 2
                     this.loadMsg='执行成功，即将转到任务列表页面'
                     this.showOverLoad = true
                     setTimeout(()=>{
                         window.location = `/index.html`
-                    },1000)
+                    },1500)
+                }).catch(()=>{
+                    this.loadMsg='结束执行失败，请检查网络或稍后重试'
+                    this.showOverLoad = true
+                    setTimeout(()=>{
+                        this.showOverLoad = false
+                    },1500)
                 })
 
             },
@@ -314,10 +352,17 @@
                 // let organizationId = '3bbcae4d-37a0-4d41-a5f8-460ef0bb66ac'
                 let path = `identity/easyNVR/number?number=${number}&activityId=${activityId}&organizationId=${organizationId}`
                 this.$http.get(path).then((response) => {
+                    //执行标志闪烁
+                    this.imgShanshuo()
                     this.nowPic = response.data.content
                     this.shotList.push(response.data.content)
                 }).catch((res) => {
-                    console.log(res)
+                        this.loadMsg = '摄像头连接错误，请返回任务列表页面'
+                        this.showOverLoad = true
+                        setTimeout(()=>{
+                            this.showOverLoad = false
+                        },1500)
+
                 })
             },
             //解析值
@@ -357,7 +402,6 @@
                 }).catch((res) => {
                     this.title = '网络错误'
                     this.context = '暂无'
-                    console.log(res)
                 })
             },
             GetQueryString(name) {
@@ -391,13 +435,20 @@
                     EXIT: 61
                 };
                 let keyDown = (evt) => {
-                    console.log(this.$refs.awesomeSwiperA);
                     evt = (evt) ? evt : ((window.event) ? window.event : "");//兼容IE和Firefox获得keyBoardEvent对象
                     let keyCode = evt.keyCode ? evt.keyCode : evt.which;
                     switch (keyCode) {
                         case KEY.BACK:
                         case KEY.PC_LEFT:
-                            window.location = `/index.html`
+                            if(this.overFlag == 2){
+                                window.location = `/index.html`
+                            }else if(this.overFlag == 1){
+                                this.loadMsg = '请先结束执行再退出'
+                                this.showOverLoad = true
+                                setTimeout(()=>{
+                                    this.showOverLoad = false
+                                },1500)
+                            }
                             break;
                         default:
                     }
@@ -413,6 +464,15 @@
             this.numbers = Str.number
             this.activityId = Str.activityId
             this.organizationId = Str.organizationId
+            this.$http.post("identity/parActivityObject/findByOrganizationIdAndActivityId",{activityId:this.activityId,organizationId:this.organizationId}).then((data)=>{
+                if(data.data.content.isWorking == 1){
+                    this.btnImg = 'img/party_activity_detail/over.png'
+                        this.overFlag = 1
+                        this.message = '结束会议'
+                }else {
+                        this.message = '开始会议'
+                }
+            })
             this.showMissionContent(this.activityId);
             this.init();
         },
