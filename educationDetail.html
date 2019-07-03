@@ -451,17 +451,13 @@ var vueIns = new Vue({
           window.clearInterval(this.timer);
       }
       this.$nextTick(function () {
-          console.log(task.flag, "start")
           var mp = new MediaPlayer();
-          console.log(task.flag, "zhongjian ")
           var instanceId = mp.getNativePlayerInstanceID();
-          mp.setVideoDisplayMode(0);
-          mp.setVideoDisplayArea(0,0,1280,720);
+          mp.setVideoDisplayMode(1);
           mp.refreshVideoDisplay();
           mp.setVolume(10);
           mp.setSingleMedia(task.videoUrl);
           mp.playFromStart();
-            console.log(task.flag, "end")
           if(task.flag === 0) {
               var time = new Date().getTime();
               var z = window.setInterval(function() {
@@ -469,9 +465,9 @@ var vueIns = new Vue({
                   var curTime = mp.getCurrentPlayTime();
                   var allTime = _this2.formatSeconds(task.lengthOfTime);
                   if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
-                      // mp.releaseMediaPlayer(instanceId);
-                      // _this2.uploadVideoRecord();
-                      // _this2.showExitCode(task);
+                      mp.releaseMediaPlayer(instanceId);
+                      _this2.uploadVideoRecord();
+                      _this2.showExitCode(task);
                       console.log("结束执行");
                       clearInterval(z);
                   }
@@ -483,7 +479,7 @@ var vueIns = new Vue({
 		var _this7 = this;
 		$.ajax({
             url: '/api/identity/tVSignIn/updateflag'+'?id='+_this7.task.id+"&flag=1",
-			type: "get",
+			type: "put",
 			async: false,
 			success: function success(data) {
 				_this7.loadVideoList();
