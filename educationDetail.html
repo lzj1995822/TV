@@ -7,10 +7,11 @@
     <script src="js/vue.runtime.js"></script>
 	<script src="js/qrcode.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
-     <!-- <script src="./eruda.js"> -->
-    <!--<script>
+    <script src="js/eruda.js"></script>
+    <script>
         eruda.init();
-    eruda.show();</script>-->
+        eruda.show();
+    </script>
     <style type="text/css">
         *{
             margin: 0;
@@ -114,7 +115,7 @@
 			left: 0px;
 			width: 100%;
 			height: 100%;
-			z-index: 100;
+			z-index: 10;
 			border-radius: 0 0 10px 10px;
 		}
 		.play_btn {
@@ -124,7 +125,7 @@
 			left: 0px;
 			width: 100%;
 			height: 100%;
-			z-index: 100;
+			z-index: 10;
 			border-radius: 0 0 10px 10px;
 		}
     </style>
@@ -270,7 +271,7 @@ var vueIns = new Vue({
 		}
       }, [_c('div', {staticClass: "viewTime"}, [_c('div', {staticStyle: {"float": "left"}}, [_vm._v(_vm._s(task.videoName))]), _vm._v(" "), (task.flag) ? _c('div', {
                 staticStyle: {
-                    "top": "12px",
+                    "top": "8px",
                     "left": "4px","position":"relative",
                     "background": "url(../img/yuanjiao/done.png)",
                     "width": "16px",
@@ -291,7 +292,7 @@ var vueIns = new Vue({
         "position": "absolute",
         "width": "1280px",
         "height": "720px",
-        "z-index": "9999"
+        "z-index": "1"
       }
     }, [_c('div', {
       staticClass: "sign",
@@ -319,7 +320,7 @@ var vueIns = new Vue({
                 "position": "fixed",
                 "right": "0",
                 "top": "400px",
-                "z-index": "9999",
+                "z-index": "2",
                 "width": "400px",
                 "height": "300px",
 				"color": "yellow",
@@ -345,7 +346,7 @@ var vueIns = new Vue({
 				"vertical-align": "top"
             }
         }, _vm._l((_vm.signInList), function (item) {
-            return _c('span', [_vm._v(_vm._s(item.userName) + " ")])
+            return _c('span', [_vm._v(_vm._s(item) + " ")])
         }), 0)]), _vm._v(" "), _c('div', {
             directives: [{
                 name: "show",
@@ -361,7 +362,7 @@ var vueIns = new Vue({
 				"vertical-align": "top"
             }
         }, _vm._l((_vm.signOutList), function (item) {
-            return _c('span', [_vm._v(_vm._s(item.userName) + " ")])
+            return _c('span', [_vm._v(_vm._s(item) + " ")])
         }), 0)])]), _vm._v(" "), _vm.vdoVisible ? _c('div', {
       staticStyle: {
         "width": "400px",
@@ -436,7 +437,7 @@ var vueIns = new Vue({
 			if (!_this.qrcode) {
 			  _this.initQrCode();
 			};
-			_this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId +"&videoId="+ _this.task.id +"&id="+ signId);
+			_this.qrcode.makeCode("http://172.16.0.207:8882/sign.html?type=0&organizationId=" + organizationId +"&videoId="+ _this.task.videoId +"&id="+  _this.task.id);
 			_this.cbtn = 'btn1';
 			_this.timer = setInterval(function() {
 				_this.loadSignList(_this.task.videoId)
@@ -447,69 +448,57 @@ var vueIns = new Vue({
       var _this2 = this;
       this.seen = false;
       this.vdoVisible = true;
-	  window.clearInterval(this.timer);
+      if (task.flag === 0) {
+          window.clearInterval(this.timer);
+      }
       this.$nextTick(function () {
-        var mp = new MediaPlayer();
-        var instanceId = mp.getNativePlayerInstanceID(); 
-		mp.setVideoDisplayMode(0);
-		mp.setVideoDisplayArea(0,0,1280,720);
-		mp.refreshVideoDisplay();
-        mp.setVolume(10);
-        mp.setSingleMedia(task.videoUrl);
-        mp.playFromStart();
-        var time = new Date().getTime();
-        var z = setInterval(function() {
-            var time1 = new Date().getTime();
-            var curTime = mp.getCurrentPlayTime();
-            var allTime = task.lengthOfTime;
-            if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
-                clearInterval(z);
-                mp.releaseMediaPlayer(instanceId);
-                if(task.flag === 1) {
+          var mp = new MediaPlayer();
+          var instanceId = mp.getNativePlayerInstanceID();
+          mp.setVideoDisplayMode(1);
+          mp.refreshVideoDisplay();
+          mp.setVolume(10);
+          mp.setSingleMedia(task.videoUrl);
+          mp.playFromStart();
+          if(task.flag === 0) {
+              var time = new Date().getTime();
+              var z = DVB.addTimer(2000, 2, "intervalAct(time)");
+          }
+          function intervalAct(time) {
+              var time1 = new Date().getTime();
+              var curTime = mp.getCurrentPlayTime();
+              var allTime = _this2.formatSeconds(task.lengthOfTime);
+              if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
+                  mp.releaseMediaPlayer(instanceId);
+                  _this2.uploadVideoRecord();
                   _this2.showExitCode(task);
-                }
-			    _this2.uploadVideoRecord();
-            }
-        },2000);
-     //   _this2.player = document.getElementById('myVideo');
-
-    //  //   _this2.player.play();
-    //     _this2.player.addEventListener('ended', function (e) {
-	// 		_this2.showExitCode(task);
-	// 		_this2.uploadVideoRecord();
-    //     });
-	// 	_this2.player.addEventListener('pause', function (e) {
-	// 	 _this2.vdoVisible = false;
-    //     });
+                  console.log("结束执行");
+                  DVB.removeTimer(z);
+              }
+          }
       });
     },
-	/*uploadVideoRecord: function() {
+	uploadVideoRecord: function() {
 		var _this7 = this;
-		var organizationId = window.location.search.split('&')[2].split('=')[1];
 		$.ajax({
-            url: 'http://localhost:8762/api/identity/parActivityObject/execute',
-			type: "get",
+            url: '/api/identity/tVSignIn/updateflag'+'?id='+_this7.task.id+"&flag=1",
+			type: "put",
 			async: false,
-			data: {
-			  videoId: _this7.task.id,
-			  organizationId: organizationId
-			},
 			success: function success(data) {
 				_this7.loadVideoList();
 			  }
 		});
-	},*/
+	},
     init: function init() {
-      document.onkeydown = keyDown;
+      document.onkeypress = keyDown;
       
       var self = this;
       
       function keyDown(evt) {
         evt = evt ? evt : window.event ? window.event : ""; //兼容IE和Firefox获得keyBoardEvent对象
-
+        console.log(evt.keyCode, "keyCode");
+          console.log(Utility.getEvent());
         var keyCode = evt.keyCode ? evt.keyCode : evt.which;
         self.aa = evt;
-       // showAlert(keyCode);
 
         switch (keyCode) {
           case 113:
@@ -519,11 +508,9 @@ var vueIns = new Vue({
             if (self.seen) {
               self.seen = false;
             }
-
             if (self.vdoVisible) {
               self.vdoVisible = false;
             }
-
             break;
 
           case 13:
@@ -561,15 +548,15 @@ var vueIns = new Vue({
     },
     showExitCode: function showExitCode(item) {
       var _this3 = this;
-		this.vdoVisible = false;
-		var organizationId = window.location.search.split('&')[2].split('=')[1];
+      this.vdoVisible = false;
+      var organizationId = window.location.search.split('&')[2].split('=')[1];
       this.seen = true;
       this.cbtn = 'btn2';
       this.$nextTick(function () {
-		  var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId +"&videoId="+ item.id +"&id="+signId;
+		  var str = "http://172.16.0.207:8882/sign.html?type=1&organizationId=" + organizationId +"&videoId="+ item.videoId +"&id="+item.id;
 		this.qrcode.makeCode(str);
 		_this3.timer = setInterval(function() {
-				_this3.loadSignList(item.id)
+				_this3.loadSignList(item.videoId)
 			}, 1500)
       });
     },
@@ -581,9 +568,6 @@ var vueIns = new Vue({
         url: '/api/identity/tVSignIn/list',
         type: "post",
         async: false,
-        beforeSend: function(request) {
-          request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
-        },
         contentType:'application/json',
         processData:true,
         data: JSON.stringify({
@@ -604,26 +588,24 @@ var vueIns = new Vue({
 		});
     },
 	loadSignList: function (videoId) {
+        var activityId = window.location.search.split('&')[1].split('=')[1];
         var districtId = window.location.search.split('&')[2].split('=')[1];
 		var self = this;
 		$.ajax({
 			url: '/api/identity/tVSignIn/list',
 			type: "post",
             async: false,
-            beforeSend: function(request) {
-                request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
-            },
             contentType:'application/json',
             processData:true,
 			data: JSON.stringify({
 				videoId: videoId,
 				organizationId: districtId,
-                activityId:id,
+                activityId:activityId,
 			}),
 			success: function (data) {
-			    self.signId = data.content[0].id;
-				self.signInList = data.content[0].signInRecord;
-				self.signOutList = data.content[0].signOutRecord;
+			    let temp = data.content[0];
+				self.signInList = temp.signInRecord ? temp.signInRecord.split(" ") : '';
+				self.signOutList = temp.signOutRecord ? temp.signOutRecord.split(" ") : '';
 			}
 		});
 	},
@@ -655,6 +637,12 @@ var vueIns = new Vue({
 		return result;
 	},
 */
+      formatSeconds: function formatSeconds(value){
+          if(value){
+              return Number(value.split(":")[0])*3600+Number(value.split(":")[1])*60+Number(value.split(":")[2])
+          }
+
+      }
   },
   mounted: function mounted() {
     this.init();
@@ -668,9 +656,6 @@ var vueIns = new Vue({
                 type: "GET",
                 async: false,
                 contentType:'application/json',
-                beforeSend: function(request) {
-                    request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
-                },
                 data:{
                     number:number,
                     activityId:activityId,
