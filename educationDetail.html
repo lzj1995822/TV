@@ -635,6 +635,9 @@ var vueIns = new Vue({
   mounted: function mounted() {
     this.init();
     this.loadVideoList();
+      setInterval(function() {
+          console.log("定時器")
+      },2000);
 	var number = window.location.search.split('&')[0].split('=')[1];
 	var activityId = window.location.search.split('&')[1].split('=')[1];
     var districtId = window.location.search.split('&')[2].split('=')[1];
