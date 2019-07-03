@@ -465,16 +465,15 @@ var vueIns = new Vue({
           if(task.flag === 0) {
               var time = new Date().getTime();
               var z = window.setInterval(function() {
-                  showAlert("定时器开始执行");
                   var time1 = new Date().getTime();
                   var curTime = mp.getCurrentPlayTime();
                   var allTime = _this2.formatSeconds(task.lengthOfTime);
                   if((allTime <= curTime && curTime != 0)||(curTime == 0 && time1 > time)){
-                      showAlert("定时器结束执行");
+                      // mp.releaseMediaPlayer(instanceId);
+                      // _this2.uploadVideoRecord();
+                      // _this2.showExitCode(task);
+                      console.log("结束执行");
                       clearInterval(z);
-                      mp.releaseMediaPlayer(instanceId);
-                      _this2.uploadVideoRecord();
-                      _this2.showExitCode(task);
                   }
               },2000);
           }
