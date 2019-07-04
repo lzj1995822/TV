@@ -510,14 +510,15 @@
                     this.initActingTimer();
                     clearInterval(this.timer);
                 }
-                playSmall( {
+                player.playSmall( {
                     url: task.videoUrl,
-                    width: 572,
-                    height: 325,
-                    left: 60,
-                    top: 129
+                    width: 1280,
+                    height: 712,
+                    left: 0,
+                    top: 0
                 })
-
+                _this2.mp = window.mp;
+                _this2.mpInstanceId = window.mp.getNativePlayerInstanceID();
                 // _this2.mp = new MediaPlayer();
                 // _this2.mpInstanceId = _this2.mp.getNativePlayerInstanceID();
                 // _this2.mp.setVideoDisplayMode(1);
