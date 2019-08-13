@@ -292,7 +292,9 @@
                         let path = 'identity/parActivityObject/execute'
                         this.$http.post(path, {
                             activityId: this.activityId,
-                            organizationId: this.organizationId
+                            organizationId: this.organizationId,
+                            number:this.numbers,
+                            phoneOrTv:'TV'
                         }).then((response) => {
                             this.btnImg = 'img/party_activity_detail/over.png'
                             this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
