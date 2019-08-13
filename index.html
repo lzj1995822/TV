@@ -194,9 +194,9 @@
                             let index = this.$refs.awesomeSwiperA.swiper.activeIndex;
                             let activity = this.todoList[index];
                             if (activity.taskType === 'Party') {
-                                window.location = `/party_activity_detail.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.organizationId}&number=${this.number}`;
+                                window.location = `/party_activity_detail.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.districtId}&number=${this.number}`;
                             } else {
-                                window.location = `/education.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.organizationId}&number=${this.number}`;
+                                window.location = `/education.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.districtId}&number=${this.number}`;
                             }
                             break;
                             default:
