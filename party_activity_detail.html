@@ -324,7 +324,7 @@
 
                             this.timer = window.setInterval(() => {
                                 this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
-                            }, 10000);
+                            }, 600000);
                             this.message = '结束会议'
                         }).catch((error) => {
                             alert('执行任务失败，请检查网络' + error)
