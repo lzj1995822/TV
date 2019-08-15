@@ -10,7 +10,7 @@
     <script src="js/api.js"></script>
     <script src="lib/vue-seamless-scroll.min.js"></script>
     <script src="lib/element-ui.js"></script>
-    <link rel="stylesheet/less" type="text/css" href="css/tv-index.css">
+    <link rel="stylesheet" type="text/css" href="css/tv-index.css">
     <link rel="stylesheet" href="css/swiper.min.css" />
     <link rel="stylesheet" href="css/index.css" />
 </head>
@@ -116,7 +116,7 @@
                                 window.location = `/education.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.districtId}&number=${this.number}`;
                             }
                             break;
-                            default:
+                        default:
                     }
                     return false;
                 };
@@ -406,7 +406,7 @@
                 ])
             ])
         }
-    }).$mount('#app')
+    }).$mount(document.getElementById('app'))
 </script>
 </body>
 </html>
