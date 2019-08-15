@@ -71,7 +71,7 @@
                 currentOrg: {},
                 parActivity: {},
                 todoList: [],
-                number: '02117616500012212',
+                number: '',
             }
         },
         methods: {
@@ -127,6 +127,7 @@
             }
         },
         created() {
+            this.number = window.hardware ? window.hardware.STB.serialNumber : '02117616500012212'
             this.$http.get('/identity/parActivity/tv/index').then(
                 data => {
                     this.parActivity = data.data.content;
