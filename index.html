@@ -16,89 +16,7 @@
     <link rel="stylesheet" href="css/index.css" />
 </head>
 <body>
-<div id="app" v-cloak>
-    <div class="container">
-        <div class="title">
-        </div>
-        <div class="org">
-            <img class="org_img" src="img/index/org_logo.png" alt="">
-            <h3 style="color: #f2f2f2">&emsp;{{currentOrg.name}}</h3>
-        </div>
-        <div class="content">
-            <div class="content_left">
-                <div>
-                    <div class="left_title">
-                        <img class="left_title_img1" src="img/index/acting.png" alt=""><h2>&nbsp;本月执行中</h2>
-                    </div>
-                    <vue-seamless-scroll :data="parActivity.currentMonth" class="warp">
-                        <ul class="item" ref="listItem">
-                            <li v-for="(item,index) in parActivity.currentMonth" style="width: 300px;">
-                                <span>{{index+1}}、{{item.title}}</span>
-                                <span class="month-display">{{item.month}}</span>
-                            </li>
-                        </ul>
-                    </vue-seamless-scroll>
-                </div>
-                <br>
-                <br>
-                <div>
-                    <div class="left_title">
-                        <img class="left_title_img2" src="img/index/plan.png" alt=""><h2>&nbsp;下月待执行</h2>
-                    </div>
-                    <vue-seamless-scroll :data="parActivity.nextMonth" class="warp">
-                        <ul class="item" ref="listItem">
-                            <li v-for="(item,index) in parActivity.nextMonth" style="width: 300px;">
-                                <span>{{index+1}}、{{item.title}}</span>
-                                <span class="month-display">{{item.month}}</span>
-                            </li>
-                        </ul>
-                    </vue-seamless-scroll>
-                </div>
-            </div>
-            <div class="content_right">
-                <div style="position: relative;z-index: 10">
-                    <h1 style="color: white;margin: 0 auto 40px auto;text-align: center">本月任务</h1>
-                    <swiper ref="awesomeSwiperA" :options="swipperOptions" >
-                        <!-- slides -->
-                        <swiper-slide v-for="(item, index) in todoList" :key="item.id">
-                            <div class="activity_detail">
-                                <h1 class="detail-title">
-                                    <img class="detail_img" v-show="item.taskType === 'Party'" src="/img/party-logo.png" alt="党建logo"/>
-                                    <img class="detail_img" v-show="item.taskType === 'DistLearning'" src="/img/learning-logo.png" alt="远教logo"/>
-                                    {{item.title}}</h1>
-                                <div class="detail_content">
-                                    <el-row style="margin: 15px 0">
-                                        <el-col class="label-width">任务类型：</el-col>
-                                        <el-col class="value-width">{{item.type}}</el-col>
-                                    </el-row>
-                                    <el-row style="margin: 15px 0">
-                                        <el-col class="label-width">任务分值：</el-col>
-                                        <el-col class="value-width">{{item.score}}分</el-col>
-                                    </el-row>
-                                    <el-row style="margin: 15px 0">
-                                        <el-col class="label-width">截止日期：</el-col>
-                                        <el-col class="value-width">{{item.month}}</el-col>
-                                    </el-row>
-                                    <el-row style="margin: 15px 0">
-                                        <el-col class="label-width">任务内容：</el-col>
-                                        <el-col class="value-width">{{item.context}}</el-col>
-                                    </el-row>
-                                </div>
-                                <div class="status-container">
-                                    <img v-if="item.status === '2'" class="status-img" src="img/finished.png" alt="">
-                                    <img v-else-if="item.status === '1'" class="status-img" src="img/review.png" alt="">
-                                    <img v-else-if="item.status === '0'" class="status-img" src="img/wait_acting.png" alt="">
-                                </div>
-                            </div>
-                        </swiper-slide>
-                        <!-- Optional controls -->
-                    </swiper>
-                </div>
-                <div class="swiper-pagination"  slot="pagination"></div>
-
-            </div>
-        </div>
-    </div>
+<div id="app">
 </div>
 <script type="application/ecmascript">
     Vue.use(VueAwesomeSwiper);
@@ -123,7 +41,7 @@
                     },
                     on: {
                         progress: function (progress) {
-                            for (i = 0; i < this.slides.length; i++) {
+                            for (let i = 0; i < this.slides.length; i++) {
                                 var slide = this.slides.eq(i);
                                 var slideProgress = this.slides[i].progress;
                                 modify = 1;
@@ -225,8 +143,271 @@
                 }
             );
             this.init();
+        },
+        render: function() {
+            var _vm = this
+            var _h = _vm.$createElement
+            var _c = _vm._self._c || _h
+            return _c("div", { staticClass: "container" }, [
+                _c("div", { staticClass: "title" }),
+                _vm._v(" "),
+                _c("div", { staticClass: "org" }, [
+                    _c("img", {
+                        staticClass: "org_img",
+                        attrs: { src: "img/index/org_logo.png", alt: "" }
+                    }),
+                    _vm._v(" "),
+                    _c("h3", { staticStyle: { color: "#f2f2f2" } }, [
+                        _vm._v(" " + _vm._s(_vm.currentOrg.name))
+                    ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" }, [
+                    _c("div", { staticClass: "content_left" }, [
+                        _c(
+                            "div",
+                            [
+                                _vm._c("div", { staticClass: "left_title" }, [
+                                    _c("img", {
+                                        staticClass: "left_title_img1",
+                                        attrs: { src: "img/index/acting.png", alt: "" }
+                                    }),
+                                    _c("h2", [_vm._v(" 本月执行中")])
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                    "vue-seamless-scroll",
+                                    {
+                                        staticClass: "warp",
+                                        attrs: { data: _vm.parActivity.currentMonth }
+                                    },
+                                    [
+                                        _c(
+                                            "ul",
+                                            { ref: "listItem", staticClass: "item" },
+                                            _vm._l(_vm.parActivity.currentMonth, function(item, index) {
+                                                return _c("li", { staticStyle: { width: "300px" } }, [
+                                                    _c("span", [
+                                                        _vm._v(_vm._s(index + 1) + "、" + _vm._s(item.title))
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("span", { staticClass: "month-display" }, [
+                                                        _vm._v(_vm._s(item.month))
+                                                    ])
+                                                ])
+                                            })
+                                        )
+                                    ]
+                                )
+                            ],
+                            1
+                        ),
+                        _vm._v(" "),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c(
+                            "div",
+                            [
+                                _vm._c("div", { staticClass: "left_title" }, [
+                                    _c("img", {
+                                        staticClass: "left_title_img2",
+                                        attrs: { src: "img/index/plan.png", alt: "" }
+                                    }),
+                                    _c("h2", [_vm._v(" 下月待执行")])
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                    "vue-seamless-scroll",
+                                    {
+                                        staticClass: "warp",
+                                        attrs: { data: _vm.parActivity.nextMonth }
+                                    },
+                                    [
+                                        _c(
+                                            "ul",
+                                            { ref: "listItem", staticClass: "item" },
+                                            _vm._l(_vm.parActivity.nextMonth, function(item, index) {
+                                                return _c("li", { staticStyle: { width: "300px" } }, [
+                                                    _c("span", [
+                                                        _vm._v(_vm._s(index + 1) + "、" + _vm._s(item.title))
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("span", { staticClass: "month-display" }, [
+                                                        _vm._v(_vm._s(item.month))
+                                                    ])
+                                                ])
+                                            })
+                                        )
+                                    ]
+                                )
+                            ],
+                            1
+                        )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "content_right" }, [
+                        _c(
+                            "div",
+                            { staticStyle: { position: "relative", "z-index": "10" } },
+                            [
+                                _c(
+                                    "h1",
+                                    {
+                                        staticStyle: {
+                                            color: "white",
+                                            margin: "0 auto 40px auto",
+                                            "text-align": "center"
+                                        }
+                                    },
+                                    [_vm._v("本月任务")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                    "swiper",
+                                    { ref: "awesomeSwiperA", attrs: { options: _vm.swipperOptions } },
+                                    _vm._l(_vm.todoList, function(item, index) {
+                                        return _c("swiper-slide", { key: item.id }, [
+                                            _c("div", { staticClass: "activity_detail" }, [
+                                                _c("h1", { staticClass: "detail-title" }, [
+                                                    _c("img", {
+                                                        directives: [
+                                                            {
+                                                                name: "show",
+                                                                rawName: "v-show",
+                                                                value: item.taskType === "Party",
+                                                                expression: "item.taskType === 'Party'"
+                                                            }
+                                                        ],
+                                                        staticClass: "detail_img",
+                                                        attrs: { src: "/img/party-logo.png", alt: "党建logo" }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c("img", {
+                                                        directives: [
+                                                            {
+                                                                name: "show",
+                                                                rawName: "v-show",
+                                                                value: item.taskType === "DistLearning",
+                                                                expression: "item.taskType === 'DistLearning'"
+                                                            }
+                                                        ],
+                                                        staticClass: "detail_img",
+                                                        attrs: {
+                                                            src: "/img/learning-logo.png",
+                                                            alt: "远教logo"
+                                                        }
+                                                    }),
+                                                    _vm._v(
+                                                        "\n                                " +
+                                                        _vm._s(item.title)
+                                                    )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c(
+                                                    "div",
+                                                    { staticClass: "detail_content" },
+                                                    [
+                                                        _c(
+                                                            "el-row",
+                                                            { staticStyle: { margin: "15px 0" } },
+                                                            [
+                                                                _c("el-col", { staticClass: "label-width" }, [
+                                                                    _vm._v("任务类型：")
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("el-col", { staticClass: "value-width" }, [
+                                                                    _vm._v(_vm._s(item.type))
+                                                                ])
+                                                            ],
+                                                            1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                            "el-row",
+                                                            { staticStyle: { margin: "15px 0" } },
+                                                            [
+                                                                _c("el-col", { staticClass: "label-width" }, [
+                                                                    _vm._v("任务分值：")
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("el-col", { staticClass: "value-width" }, [
+                                                                    _vm._v(_vm._s(item.score) + "分")
+                                                                ])
+                                                            ],
+                                                            1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                            "el-row",
+                                                            { staticStyle: { margin: "15px 0" } },
+                                                            [
+                                                                _c("el-col", { staticClass: "label-width" }, [
+                                                                    _vm._v("截止日期：")
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("el-col", { staticClass: "value-width" }, [
+                                                                    _vm._v(_vm._s(item.month))
+                                                                ])
+                                                            ],
+                                                            1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                            "el-row",
+                                                            { staticStyle: { margin: "15px 0" } },
+                                                            [
+                                                                _c("el-col", { staticClass: "label-width" }, [
+                                                                    _vm._v("任务内容：")
+                                                                ]),
+                                                                _vm._v(" "),
+                                                                _c("el-col", { staticClass: "value-width" }, [
+                                                                    _vm._v(_vm._s(item.context))
+                                                                ])
+                                                            ],
+                                                            1
+                                                        )
+                                                    ],
+                                                    1
+                                                ),
+                                                _vm._v(" "),
+                                                _c("div", { staticClass: "status-container" }, [
+                                                    item.status === "2"
+                                                        ? _c("img", {
+                                                            staticClass: "status-img",
+                                                            attrs: { src: "img/finished.png", alt: "" }
+                                                        })
+                                                        : item.status === "1"
+                                                        ? _c("img", {
+                                                            staticClass: "status-img",
+                                                            attrs: { src: "img/review.png", alt: "" }
+                                                        })
+                                                        : item.status === "0"
+                                                            ? _c("img", {
+                                                                staticClass: "status-img",
+                                                                attrs: { src: "img/wait_acting.png", alt: "" }
+                                                            })
+                                                            : _vm._e()
+                                                ])
+                                            ])
+                                        ])
+                                    })
+                                )
+                            ],
+                            1
+                        ),
+                        _vm._v(" "),
+                        _c("div", {
+                            staticClass: "swiper-pagination",
+                            attrs: { slot: "pagination" },
+                            slot: "pagination"
+                        })
+                    ])
+                ])
+            ])
         }
-    })
+    }).$mount('#app')
 </script>
 </body>
 </html>
