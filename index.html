@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="lib/vue.min.js"></script>
+    <script src="lib/vue.runtime.js"></script>
     <script src="lib/swiper.min.js"></script>
     <script src="lib/vue-awesome-swiper.js"></script>
     <script src="lib/axios.min.js"></script>
     <script src="js/api.js"></script>
     <script src="lib/vue-seamless-scroll.min.js"></script>
     <script src="lib/element-ui.js"></script>
-    <link rel="stylesheet/less" type="text/css" href="css/tv-index.less">
-    <script src="lib/less.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/tv-index.css">
     <link rel="stylesheet" href="css/swiper.min.css" />
     <link rel="stylesheet" href="css/index.css" />
 </head>
@@ -117,7 +116,7 @@
                                 window.location = `/education.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.districtId}&number=${this.number}`;
                             }
                             break;
-                            default:
+                        default:
                     }
                     return false;
                 };
@@ -408,7 +407,7 @@
                 ])
             ])
         }
-    }).$mount('#app')
+    }).$mount(document.getElementById('app'))
 </script>
 </body>
 </html>
