@@ -10,10 +10,6 @@
     <script src="lib/vue-awesome-swiper.js"></script>
     <link rel="stylesheet" href="css/swiper.min.css"/>
     <script src="lib/player.js"></script>
-   <script>
-       eruda.init();
-       eruda.show();
-   </script>
     <style>
         * {
             margin: 0;
@@ -35,34 +31,16 @@
             position: relative;
             background: url("img/party_activity_detail/bg2.png") no-repeat;
             background-size: 100% auto;
-            /*z-index: -1;*/
         }
-
-        /*截图*/
-        .video {
-            height: 39%;
-            width: 52%;
-            top: 1%;
-            left: 10.5%;
-            position: relative;
-            border-radius: 10px;
-            z-index: 1;
-            border: 1px solid red;
-        }
-
         /*截图背景*/
         .videoBg {
-            top: 18%;
-            left: 22%;
             position: relative;
             background: url("img/party_activity_detail/ship.png") no-repeat;
             background-size: 100% auto;
-            z-index: 0;
             height: 70%;
-            width: 70%;
-            transform: scale(1.55);
+            width: 100%;
             border: none;
-
+            right: -7%
         }
 
         /*轮播*/
@@ -74,7 +52,7 @@
             top: -9%;
             overflow: hidden;
             /*background: rgba(170, 238, 255, .5);*/
-           /*border: 8px solid rgba(255, 255, 255, .5);*/
+            /*border: 8px solid rgba(255, 255, 255, .5);*/
         }
 
         /*按钮位置*/
@@ -213,15 +191,9 @@
 <body>
 
 <div id="bgMeeting" class="main">
-    <div style="float: left;width:45%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 5%;text-align: center">
+    <div style="display: inline-block;width:45%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 5%;text-align: center">
         <div class="videoBg">
-            <div class="video">
-                <img :src="exexuteImg" :style="shanShuo">
-                <video id="myVideo" class='nowPic'  v-if="nowPic!=''"
-                 preload='auto' autoplay style="width:100%;height:100%;object-fit:fill" controls="false">
-                 <source type='application/x-mpegURL' :src='ip'>
-                </video>
-            </div>
+            <img :src="exexuteImg" :style="shanShuo">
         </div>
         <div class="picList" class="unselectable">
             <swiper :options="swiperOption" ref="mySwiper" class="unselectable">
@@ -237,27 +209,27 @@
             <img src="img/yuanjiao/back.png">
         </div>
     </div>
-    <div style="float: left;width:35%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 10%;margin:0 auto;">
+    <div style="display: inline-block;width:35%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 10%;margin:0 auto;">
         <template>
-        <div class="mission">
-            <div class="title">{{title}}</div>
-            <div class="separator"></div>
-            <div class="taskType">任务类型：党建任务</div>
-            <div class="content">
-                {{context}}
+            <div class="mission">
+                <div class="title">{{title}}</div>
+                <div class="separator"></div>
+                <div class="taskType">任务类型：党建任务</div>
+                <div class="content">
+                    {{context}}
+                </div>
+                <div class="btnPosition">
+                    <button @click="execute(message)"
+                            style="background-color:transparent;border: 0px;z-index:2;width: 100%;height:100%;position: absolute">
+
+                    </button>
+                    <img :src="btnImg" style="z-index: 1;width:100%;height: 100%;position: absolute"></div>
+
             </div>
-            <div class="btnPosition">
-                <button @click="execute(message)"
-                        style="background-color:transparent;border: 0px;z-index:2;width: 100%;height:100%;position: absolute">
-
-                </button>
-                <img :src="btnImg" style="z-index: 1;width:100%;height: 100%;position: absolute"></div>
-
-        </div>
         </template>
     </div>
     <template>
-    <div class="overLoad" v-if="showOverLoad">{{loadMsg}}</div>
+        <div class="overLoad" v-if="showOverLoad">{{loadMsg}}</div>
     </template>
 </div>
 
@@ -312,8 +284,8 @@
                 shanShuo: {
                     zIndex: '3',
                     position: 'absolute',
-                    top: '8px',
-                    right: '8px',
+                    top: '4%',
+                    left: '58%',
                     width: '20px',
                     height: '20px',
                     display: ''
@@ -366,11 +338,13 @@
                                 this.$http.get(path).then(data=> {
                                     if (data.data.content.ip) {
                                         this.ip = data.data.content.ip;
+                                        let width = window.screen.width;
+                                        let ratio = width === 1280 ? 1.78 : 1;
                                         let playParam = {
-                                            height: '39%',
-                                            width: '52%',
-                                            top: '1%',
-                                            left: '10.5%',
+                                            height: 395 / ratio,
+                                            width: 535 / ratio,
+                                            top: 270 / ratio,
+                                            left: 295 / ratio ,
                                             url: this.ip
                                         }
                                         player.playSmall(playParam)
@@ -582,7 +556,6 @@
                 delay: 1000, //1秒切换一次
                 disableOnInteraction: false
             }
-            this.execute();
         }
     })
 </script>
