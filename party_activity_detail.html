@@ -9,6 +9,7 @@
     <script src="lib/swiper.min.js"></script>
     <script src="lib/vue-awesome-swiper.js"></script>
     <link rel="stylesheet" href="css/swiper.min.css"/>
+    <script src="lib/player.js"></script>
     <style>
         * {
             margin: 0;
@@ -30,44 +31,25 @@
             position: relative;
             background: url("img/party_activity_detail/bg2.png") no-repeat;
             background-size: 100% auto;
-            /*z-index: -1;*/
         }
-
-        /*截图*/
-        .video {
-            height: 47%;
-            width: 52%;
-            top: 1%;
-            left: 10.5%;
-            position: relative;
-            border-radius: 10px;
-            z-index: 1;
-            /*border: 1px solid red;*/
-
-        }
-
         /*截图背景*/
         .videoBg {
-            top: 6%;
-            left: 22%;
             position: relative;
             background: url("img/party_activity_detail/ship.png") no-repeat;
             background-size: 100% auto;
-            z-index: 0;
             height: 70%;
-            width: 70%;
-            transform: scale(1.2);
+            width: 100%;
             border: none;
-
+            right: -7%
         }
 
         /*轮播*/
         .picList {
             position: relative;
-            height: 18%;
-            width: 80%;
-            left: 10%;
-            top: -10%;
+            height: 25%;
+            width: 95%;
+            left: -6%;
+            top: -9%;
             overflow: hidden;
             /*background: rgba(170, 238, 255, .5);*/
             /*border: 8px solid rgba(255, 255, 255, .5);*/
@@ -78,24 +60,23 @@
             position: absolute;
             top: 77%;
             left: 5%;
-            width: 26%;
-            height: 15%;
+            width: 30%;
+            height: 11.5%;
         }
-
 
         /*任务名*/
         .title {
             position: relative;
-            top: 3%;
+            top: 3.5%;
             left: 5%;
             height: 5%;
-            font-size: 180%;
-            color: white;
-            font-weight: bold;
+            font-size: 200%;
+            color: #eeeeee;
+            font-weight: 500;
         }
 
         .separator {
-            top:10%;
+            top:12%;
             height: 0px;
             width: 90%;
             margin: 0 auto;
@@ -108,32 +89,33 @@
             letter-spacing: 1.5px;
             line-height: 150%;
             position: relative;
-            top: 14%;
+            top: 18%;
             left: 5%;
-            width: 85%;
-            font-size: 120%;
-            color: white;
-            font-weight: bold;
+            width: 90%;
+            font-size: 140%;
+            color: #eeeeee;
         }
 
         .taskType {
             position: relative;
-            top: 12%;
+            top: 15%;
             left: 5%;
-            font-size: 140%;
-            color: white;
-            font-weight: bold;
+            font-size: 150%;
+            color: #eeeeee;
+
         }
 
         .nowPic {
-            width: 100%;
-            height: 100%;
+            object-fit: fill;
+            border-radius: 10px;
+            width:100%;
+            height:100%;
         }
 
         /*轮播内各个图片*/
         .picListStyle {
-            width: 100%;
-            height: 100%;
+            width: 110%;
+            height: 110%;
             overflow: hidden;
             border: 2px solid white;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), 0 0 80px rgba(0, 0, 0, 0.06) inset;
@@ -146,7 +128,8 @@
             box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.3);
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 6px;
-            width: 100%;
+            width: 90%;
+            left: 5%;
             height: 70%;
             position: relative;
         }
@@ -188,17 +171,29 @@
             text-align: center;
             line-height: 700%;
         }
+        .swiper-pagination-customs{
+            width:.5rem;
+            height:.5rem;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            background: white;
+        }
+        .swiper-pagination-customs-active{
+            opacity: 1;
+            background-color:#00ffff ;
+        }
+        .vjs-control-bar{
+            opacity: 0 !important;
+        }
     </style>
 </head>
 <body>
 
 <div id="bgMeeting" class="main">
-    <div style="float: left;width:45%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 5%;text-align: center">
+    <div style="display: inline-block;width:45%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 5%;text-align: center">
         <div class="videoBg">
-            <div class="video">
-                <img :src="exexuteImg" :style="shanShuo">
-                <img :src="nowPic" v-if="nowPic!=''" class="nowPic">
-            </div>
+            <img :src="exexuteImg" :style="shanShuo">
         </div>
         <div class="picList" class="unselectable">
             <swiper :options="swiperOption" ref="mySwiper" class="unselectable">
@@ -214,25 +209,28 @@
             <img src="img/yuanjiao/back.png">
         </div>
     </div>
-    <div style="float: left;width:35%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 10%;margin:0 auto;">
-        <div class="mission">
-            <div class="title">{{title}}</div>
-            <div class="separator"></div>
-            <div class="taskType">任务类型：党建任务</div>
-            <div class="content">
-                {{context}}
+    <div style="display: inline-block;width:35%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 10%;margin:0 auto;">
+        <template>
+            <div class="mission">
+                <div class="title">{{title}}</div>
+                <div class="separator"></div>
+                <div class="taskType">任务类型：党建任务</div>
+                <div class="content">
+                    {{context}}
+                </div>
+                <div class="btnPosition">
+                    <button @click="execute(message)"
+                            style="background-color:transparent;border: 0px;z-index:2;width: 100%;height:100%;position: absolute">
+
+                    </button>
+                    <img :src="btnImg" style="z-index: 1;width:100%;height: 100%;position: absolute"></div>
+
             </div>
-            <div class="btnPosition">
-                <button @click="execute(message)"
-                        style="background-color:transparent;border: 0px;z-index:2;width: 100%;height:100%;position: absolute">
-
-                </button>
-                <img :src="btnImg" style="z-index: 1;width:100%;height: 100%;position: absolute"></div>
-
-        </div>
+        </template>
     </div>
-    <div class="overLoad" v-if="showOverLoad">{{loadMsg}}</div>
-
+    <template>
+        <div class="overLoad" v-if="showOverLoad">{{loadMsg}}</div>
+    </template>
 </div>
 
 <script>
@@ -263,8 +261,22 @@
                         disableOnInteraction: false,
                         waitForTransition: true
                     },
+                    centeredSlides:true,
                     pagination: {
                         el: '.swiper-pagination',
+                        type: 'custom',
+                        renderCustom: function (swiper, current, total) {
+                            var customPaginationHtml = "";
+                            for(var i = 0; i < total; i++) {
+                                //判断哪个分页器此刻应该被激活
+                                if(i == (current - 1)) {
+                                    customPaginationHtml += '<span class="swiper-pagination-customs swiper-pagination-customs-active"></span>';
+                                } else {
+                                    customPaginationHtml += '<span class="swiper-pagination-customs"></span>';
+                                }
+                            }
+                            return customPaginationHtml;
+                        },
                         clickable: true
                     },
                 },
@@ -272,10 +284,10 @@
                 shanShuo: {
                     zIndex: '3',
                     position: 'absolute',
-                    top: '8px',
-                    right: '8px',
-                    width: '30px',
-                    height: '30px',
+                    top: '4%',
+                    left: '58%',
+                    width: '20px',
+                    height: '20px',
                     display: ''
 
                 },
@@ -291,7 +303,8 @@
                 showOverLoad: false,
                 loadMsg: '执行成功，即将转到任务列表页面',
                 //判断是否点击结束执行
-                overFlag: 0
+                overFlag: 0,
+                ip:''
             }
         },
         methods: {
@@ -320,14 +333,45 @@
                             phoneOrTv: 'TV'
                         }).then((response) => {
                             this.btnImg = 'img/party_activity_detail/over.png'
-                            this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
+                            this.showPic(response.data.content[0].activityId, response.data.content[0].districtId).then(()=>{
+                                let path = 'identity/parCamera/redisIp?key='+this.organizationId;
+                                this.$http.get(path).then(data=> {
+                                    if (data.data.content.ip) {
+                                        this.ip = data.data.content.ip;
+                                        let width = window.screen.width;
+                                        let ratio = width === 1280 ? 1.78 : 1;
+                                        let playParam = {
+                                            height: 395 / ratio,
+                                            width: 535 / ratio,
+                                            top: 270 / ratio,
+                                            left: 295 / ratio ,
+                                            url: this.ip
+                                        }
+                                        player.playSmall(playParam)
+
+                                    }else {
+                                        this.loadMsg = '摄像头不存在'
+                                        this.showOverLoad = true
+                                        setTimeout(() => {
+                                            this.showOverLoad = false
+                                        }, 1500)
+                                    }
+                                }).catch(()=>{
+                                    this.loadMsg = '摄像头启动失败'
+                                    this.showOverLoad = true
+                                    setTimeout(() => {
+                                        this.showOverLoad = false
+                                    }, 1500)
+                                })
+                            })
 
                             this.timer = window.setInterval(() => {
                                 this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
                             }, 600000);
                             this.message = '结束会议'
                         }).catch((error) => {
-                            alert('执行任务失败，请检查网络' + error)
+                            this.loadMsg = '执行任务失败，请检查网络'
+                            this.showOverLoad = true
                         });
                     } else {
                         this.executeOver();
@@ -368,6 +412,7 @@
             },
             showPic(activityId, organizationId) {
                 // let number = this.getParam('number');
+
                 this.index = this.index + 1
                 if (this.index == 5) {
                     this.$refs.mySwiper.swiper.slideTo(2, 1000, false)
@@ -376,7 +421,7 @@
                 // let activityId = 'a6721c5d-541a-487a-9bf2-8d57cd9de630'
                 // let organizationId = '3bbcae4d-37a0-4d41-a5f8-460ef0bb66ac'
                 let path = `identity/easyNVR/number?number=${number}&activityId=${activityId}&organizationId=${organizationId}`
-                this.$http.get(path).then((response) => {
+                return  this.$http.get(path).then((response) => {
                     //执行标志闪烁
                     this.imgShanshuo()
                     this.nowPic = response.data.content
@@ -463,6 +508,17 @@
                     evt = (evt) ? evt : ((window.event) ? window.event : "");//兼容IE和Firefox获得keyBoardEvent对象
                     let keyCode = evt.keyCode ? evt.keyCode : evt.which;
                     switch (keyCode) {
+                        case KEY.DOWN:
+                        case KEY.PC_DOWN:
+                            break;
+                        case KEY.UP:
+                        case KEY.PC_UP:
+                            break;
+                        case KEY.LEFT:
+                            break;
+                        case KEY.RIGHT:
+                        case KEY.PC_RIGHT:
+                            break;
                         case KEY.BACK:
                         case KEY.PC_LEFT:
                             if (this.overFlag == 2) {
@@ -476,7 +532,7 @@
                             }
                             break;
                         case KEY.ENTER:
-                            this.execute()
+                            this.execute();
                             break;
                         default:
                     }
@@ -492,18 +548,6 @@
             this.numbers = Str.number
             this.activityId = Str.activityId
             this.organizationId = Str.organizationId
-            this.$http.post("identity/parActivityObject/findByOrganizationIdAndActivityId", {
-                activityId: this.activityId,
-                organizationId: this.organizationId
-            }).then((data) => {
-                if (data.data.content.isWorking == 1) {
-                    this.btnImg = 'img/party_activity_detail/over.png'
-                    this.overFlag = 1
-                    this.message = '结束会议'
-                } else {
-                    this.message = '开始会议'
-                }
-            })
             this.showMissionContent(this.activityId);
             this.init();
         },
