@@ -48,10 +48,6 @@ h5 {
   height: 26.041666666667vw;
   margin-right: 3.125vw;
 }
-.swiper-slide {
-  width: 40.260416666667vw !important;
-  padding: 15px;
-}
 .activity_detail {
   width: 40.260416666667vw;
   height: 27.708333333333vw;
@@ -120,15 +116,10 @@ h5 {
   width: 10.416666666667vw;
   height: 10.416666666667vw;
 }
-.org {
-  position: absolute;
-  right: 9.375vw;
-  display: flex;
-}
 .status-container {
   position: absolute;
-  right: 2.0833333333333vw;
-  bottom: 1.0416666666667vw;
+  right: 4.1vw;
+  top: 9vw;
 }
 .detail-title {
   position: relative;

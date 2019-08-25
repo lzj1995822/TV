@@ -49,7 +49,7 @@
         }
         .scroll-area {
             flex: 1;
-            padding: 10px 20px;
+            padding: 15px 30px;
         }
         .task-list {
             flex: 3;
@@ -79,6 +79,15 @@
             background-image: linear-gradient(-45deg,#2E6AC1,#4463B7,#3D58B2);
             border: 1px solid #007aff7d;
             box-shadow: 0 2px 8px rgba(0,0,0,0.27), 0 0 80px rgba(0,0,0,0.06) inset;
+            margin-bottom: 50px;
+        }
+
+        #planing-data {
+            height: 15.625vw;
+            overflow: hidden;
+            background-image: linear-gradient(-45deg,#2E6AC1,#4463B7,#3D58B2);
+            border: 1px solid #007aff7d;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.27), 0 0 80px rgba(0,0,0,0.06) inset;
         }
         .month-display {
             float: right;
@@ -86,6 +95,10 @@
         }
         .el-row {
             display: flex;
+            margin: 15px 0;
+        }
+        #swiper {
+            width: calc(100vw * 0.75);
         }
     </style>
     <link type="text/css" rel="stylesheet" href="css/liMarquee.css"/>
@@ -98,26 +111,28 @@
             <div class="title"></div>
             <div class="org">
                 <img src="img/index/org_logo.png" style="width: 45px;height: 30px;" alt="">
+                <span id="org_name" style="vertical-align: super;color: white;font-size: 18px;"></span>
             </div>
         </div>
         <div class="main-content">
             <div class="scroll-area">
                 <div class="acting-label">
                     <img src="img/index/acting.png" width="31" height="32" alt="">
-                    <div style="display:inline-block;vertical-align: top; font-size: 22px">本月执行中</div>
+                    <div style="display:inline-block;vertical-align: top; font-size: 20px;font-weight: bold">本月执行中</div>
                 </div>
                 <div id="acting-data">
                 </div>
 
                 <div class="acting-label">
                     <img src="img/index/plan.png" width="25" height="32" alt="">
-                    <div style="display:inline-block;vertical-align: top; font-size: 22px"> 下月待执行</div>
+                    <div style="display:inline-block;vertical-align: top; font-size: 20px;font-weight: bold"> 下月待执行</div>
                 </div>
-                <div id="planing-data"></div>
+                <div id="planing-data">
+                </div>
             </div>
             <div class="task-list">
-                <h3>本月任务</h3>
-                <div id="swiper">
+                <h1 style="color: white; margin: 0px auto 60px; text-align: center;">本月任务</h1>
+                <div id="swiper" class="swiper-container">
 
                 </div>
                 <div class="swiper-pagination"></div>
@@ -126,13 +141,15 @@
     </div>
 </body>
 <script>
+    let todoList = [];
+    let currentOrg = {};
+    let number = window.hardware ? window.hardware.STB.serialNumber : '02117616500012212';
     $(function () {
-        // init();
+        init();
         renderData();
     })
 
     function renderData() {
-        let number = window.hardware ? window.hardware.STB.serialNumber : '02117616500012212'
         renderScrollData();
         renderTodoData(number);
         renderOrgData(number);
@@ -169,9 +186,10 @@
 
     function renderTodoData(number) {
         function successCb (data) {
-            let innerHtml = '';
+            todoList = data.content;
+            let innerHtml = '<div class="swiper-wrapper">';
             data.content.forEach(item => {
-                innerHtml += `<div class="activity_detail"><h1 class="detail-title">`;
+                innerHtml += `<div class="activity_detail swiper-slide"><h1 class="detail-title">`;
                 if (item.taskType === 'Party') {
                     innerHtml += `<img class="detail_img" src="img/party-logo.png" alt="党建logo"/>`
                 } else {
@@ -205,8 +223,9 @@
                 }
                 innerHtml += `</div></div></div>`;
             })
+            innerHtml += '</div>';
             $('#swiper').append(innerHtml);
-            window.swiper = new Swiper('#swiper', {
+            window.swiper = new Swiper('.swiper-container', {
                 effect: 'coverflow',
                 grabCursor: true,
                 centeredSlides: true,
@@ -260,7 +279,8 @@
 
     function renderOrgData(number) {
         function successCb (data) {
-
+            currentOrg = data.content;
+            $("#org_name").text(data.content.name)
         }
         function errorCb(data) {
 
@@ -303,11 +323,11 @@
                     break;
                 case KEY.ENTER:
                     let index = swiper.activeIndex;
-                    let activity = this.todoList[index];
+                    let activity = todoList[index];
                     if (activity.taskType === 'Party') {
-                        window.location = `/party_activity_detail.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.districtId}&number=${this.number}`;
+                        window.location = `/party_activity_detail.html?activityId=${activity.activityId}&organizationId=${currentOrg.districtId}&number=${number}`;
                     } else {
-                        window.location = `/education.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.districtId}&number=${this.number}`;
+                        window.location = `/education.html?activityId=${activity.activityId}&organizationId=${currentOrg.districtId}&number=${number}`;
                     }
                     break;
                 default:
