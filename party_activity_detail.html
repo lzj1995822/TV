@@ -29,8 +29,18 @@
             width: 100%;
             height: 100%;
             position: relative;
-            background: url("img/party_activity_detail/bg2.png") no-repeat;
+            background: url("img/party_activity_detail/bg3.jpg") no-repeat;
             background-size: 100% auto;
+        }
+        .header-title {
+            width: 35.40625vw;
+            height: 4.6875vw;
+            position: relative;
+            top: 40px;
+            left: 40px;
+            background: url("../img/index/title.png") no-repeat;
+            background-size: 100% 100%;
+            margin-bottom: 85px
         }
         /*截图背景*/
         .videoBg {
@@ -191,6 +201,8 @@
 <body>
 
 <div id="bgMeeting" class="main">
+    <div class="header-title">
+    </div>
     <div style="display: inline-block;width:45%;height: 78%;vertical-align:middle;position: relative;top:20%;left: 5%;text-align: center">
         <div class="videoBg">
             <img :src="exexuteImg" :style="shanShuo">
@@ -232,6 +244,16 @@
         <div class="overLoad" v-if="showOverLoad">{{loadMsg}}</div>
     </template>
 </div>
+<script>
+    window.onload = function() {
+        setTimeout(function() {
+            window.addEventListener('popstate', function(event) {
+                mp.release();
+                window.removeEventListener('popstate');
+            }
+        },0);
+    }
+</script>
 
 <script>
     Vue.use(VueAwesomeSwiper);
@@ -320,8 +342,16 @@
                 }
                 let msg = this.message
                 //测试摄像头是否可用
-                let path = `identity/easyNVR/number?number=${this.numbers}&activityId=${this.activityId}&organizationId=${this.organizationId}`
+                let path = `identity/easyNVR/isOnline?number=${this.numbers}&activityId=${this.activityId}&organizationId=${this.organizationId}`
                 this.$http.get(path).then((response) => {
+                    if(response.code == 500){
+                        this.loadMsg = '摄像头不在线，请检查设备'
+                        this.showOverLoad = true
+                        setTimeout(() => {
+                            this.showOverLoad = false
+                        }, 1500)
+                        return;
+                    }
                     if (msg == '开始会议') {
                         this.overFlag = 1
                         //执行按钮变换
@@ -333,7 +363,7 @@
                             phoneOrTv: 'TV'
                         }).then((response) => {
                             this.btnImg = 'img/party_activity_detail/over.png'
-                            this.showPic(response.data.content[0].activityId, response.data.content[0].districtId).then(()=>{
+                            this.showPic(response.data.content[0].activityId, this.organizationId).then(()=>{
                                 let path = 'identity/parCamera/redisIp?key='+this.organizationId;
                                 this.$http.get(path).then(data=> {
                                     if (data.data.content.ip) {
@@ -356,7 +386,7 @@
                                             this.showOverLoad = false
                                         }, 1500)
                                     }
-                                }).catch(()=>{
+                                }).catch((err)=>{
                                     this.loadMsg = '摄像头启动失败'
                                     this.showOverLoad = true
                                     setTimeout(() => {
@@ -366,8 +396,8 @@
                             })
 
                             this.timer = window.setInterval(() => {
-                                this.showPic(response.data.content[0].activityId, response.data.content[0].districtId)
-                            }, 600000);
+                                this.showPic(response.data.content[0].activityId, this.organizationId)
+                            }, 360000);
                             this.message = '结束会议'
                         }).catch((error) => {
                             this.loadMsg = '执行任务失败，请检查网络'
@@ -399,8 +429,9 @@
                     this.loadMsg = '执行成功，即将转到任务列表页面'
                     this.showOverLoad = true
                     setTimeout(() => {
-                        window.location = `/index.html`
+                        window.history.back();
                     }, 1500)
+                    player.release();
                 }).catch(() => {
                     this.loadMsg = '结束执行失败，请检查网络或稍后重试'
                     this.showOverLoad = true
@@ -414,9 +445,13 @@
                 // let number = this.getParam('number');
 
                 this.index = this.index + 1
-                if (this.index == 5) {
+                if(this.index == 3){
+                    this.$refs.mySwiper.swiper.slideTo(1, 1000, false)
+                }
+                if (this.index == 4) {
                     this.$refs.mySwiper.swiper.slideTo(2, 1000, false)
                 }
+
                 let number = this.numbers
                 // let activityId = 'a6721c5d-541a-487a-9bf2-8d57cd9de630'
                 // let organizationId = '3bbcae4d-37a0-4d41-a5f8-460ef0bb66ac'
@@ -522,6 +557,7 @@
                         case KEY.BACK:
                         case KEY.PC_LEFT:
                             if (this.overFlag == 2) {
+                                player.release();
                                 window.location = `/index.html`
                             } else if (this.overFlag == 1) {
                                 this.loadMsg = '请先结束执行再退出'
