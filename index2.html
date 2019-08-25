@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/api.js"></script>
+    <script type="text/javascript" src="js/jquery.liMarquee.js"></script>
+    <script type="text/javascript" src="lib/swiper.min.js"></script>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        .main-contain {
+            width: 100%;
+            height: 100%;
+            background: url("img/index/bg.jpg") no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+            max-height: 1080px;
+            overflow: hidden;
+        }
+        .header {
+            padding: 40px 20px;
+            position: relative;
+            clear: both;
+        }
+        .title {
+            width: 850px;
+            height: 90px;
+            background: url("img/index/title.png") no-repeat;
+            float: left;
+        }
+        .org {
+            width: 300px;
+            float: right;
+            min-height: 30px;
+            padding-top: 35px;
+        }
+        .main-content {
+            width: 100%;
+            height: auto;
+            display: flex;
+        }
+        .scroll-area {
+            flex: 1;
+            padding: 10px 20px;
+        }
+        .task-list {
+            flex: 3;
+        }
+        .acting-label {
+            background-image: linear-gradient(to bottom,#ffffff,#E3E6E7);
+            padding: 10px 12px;
+            border-top-right-radius: 8px;
+            border-top-left-radius: 8px;
+        }
+        ul {
+            padding: 0 20px;
+        }
+        ul li {
+            list-style: none;
+            font-size: 1.0416666666667vw;
+            line-height: 1.875vw;
+            width: 100% !important;
+            border-bottom: 1px solid #ffffff;
+            color: #f5f5f5;
+            padding-top: 14px;
+        }
+
+        #acting-data {
+            height: 15.625vw;
+            overflow: hidden;
+            background-image: linear-gradient(-45deg,#2E6AC1,#4463B7,#3D58B2);
+            border: 1px solid #007aff7d;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.27), 0 0 80px rgba(0,0,0,0.06) inset;
+        }
+        .month-display {
+            float: right;
+            font-size: 1.0416666666667vw;
+        }
+        .el-row {
+            display: flex;
+        }
+    </style>
+    <link type="text/css" rel="stylesheet" href="css/liMarquee.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/tv-index.css">
+</head>
+<body>
+    <div class="main-contain">
+        <div class="header">
+            <div class="title"></div>
+            <div class="org">
+                <img src="img/index/org_logo.png" style="width: 45px;height: 30px;" alt="">
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="scroll-area">
+                <div class="acting-label">
+                    <img src="img/index/acting.png" width="31" height="32" alt="">
+                    <div style="display:inline-block;vertical-align: top; font-size: 22px">本月执行中</div>
+                </div>
+                <div id="acting-data">
+                </div>
+
+                <div class="acting-label">
+                    <img src="img/index/plan.png" width="25" height="32" alt="">
+                    <div style="display:inline-block;vertical-align: top; font-size: 22px"> 下月待执行</div>
+                </div>
+                <div id="planing-data"></div>
+            </div>
+            <div class="task-list">
+                <h3>本月任务</h3>
+                <div id="swiper">
+
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(function () {
+        // init();
+        renderData();
+    })
+
+    function renderData() {
+        let number = window.hardware ? window.hardware.STB.serialNumber : '02117616500012212'
+        renderScrollData();
+        renderTodoData(number);
+        renderOrgData(number);
+    }
+
+    function renderScrollData() {
+        function successCb (data) {
+            let innerHtml = '<ul>'
+            data.content.currentMonth.forEach((item, index) => {
+                innerHtml += `<li><span>${index+1}、${item.title}</span>
+                                <span class="month-display">${item.month}</span></li>`
+            })
+            innerHtml += '</ul>';
+            $("#acting-data").append(innerHtml);
+            $("#acting-data").liMarquee({
+                direction: 'up'
+            });
+            innerHtml = '<ul>'
+            data.content.nextMonth.forEach((item, index) => {
+                innerHtml += `<li><span>${index+1}、${item.title}</span>
+                                <span class="month-display">${item.month}</span></li>`
+            })
+            innerHtml += '</ul>';
+            $("#planing-data").append(innerHtml);
+            $("#planing-data").liMarquee({
+                direction: 'up'
+            });
+        }
+        function errorCb(data) {
+            console.log("获取当前月下月任务失败", data)
+        }
+        $http('get', 'identity/parActivity/tv/index', null, successCb, errorCb);
+    }
+
+    function renderTodoData(number) {
+        function successCb (data) {
+            let innerHtml = '';
+            data.content.forEach(item => {
+                innerHtml += `<div class="activity_detail"><h1 class="detail-title">`;
+                if (item.taskType === 'Party') {
+                    innerHtml += `<img class="detail_img" src="img/party-logo.png" alt="党建logo"/>`
+                } else {
+                    innerHtml += `<img class="detail_img" src="img/learning-logo.png" alt="远教logo"/>`
+                }
+                innerHtml +=
+                    `${item.title}</h1>
+                    <div class="detail_content">
+                        <div class="el-row">
+                            <div class="el-col label-width">任务类型：</div>
+                            <div class="el-col value-width">${item.type}</div>
+                        </div>
+                        <div class="el-row">
+                            <div class="el-col label-width">任务分值：</div>
+                            <div class="el-col value-width">${item.score}</div>
+                        </div>
+                        <div class="el-row">
+                            <div class="el-col label-width">截止日期：</div>
+                            <div class="el-col value-width">${item.month}</div>
+                        </div>
+                        <div class="el-row">
+                            <div class="el-col label-width">任务内容：</div>
+                            <div class="el-col value-width">${item.context}</div>
+                        </div><div class="status-container">`;
+                if (item.status === "2") {
+                    innerHtml += `<img class="status-img" src="img/finished.png"/>`;
+                } else if (item.status === "1") {
+                    innerHtml += `<img class="status-img" src="img/review.png"/>`;
+                } else {
+                    innerHtml += `<img class="status-img" src="img/wait_acting.png"/>`;
+                }
+                innerHtml += `</div></div></div>`;
+            })
+            $('#swiper').append(innerHtml);
+            window.swiper = new Swiper('#swiper', {
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 250,
+                    depth: 400,
+                    modifier: 1,
+                    slideShadows : true
+                },
+                pagination: {
+                    el: '.swiper-pagination'
+                },
+                on: {
+                    progress: function (progress) {
+                        for (let i = 0; i < this.slides.length; i++) {
+                            var slide = this.slides.eq(i);
+                            var slideProgress = this.slides[i].progress;
+                            modify = 1;
+                            if (Math.abs(slideProgress) > 1) {
+                                modify = (Math.abs(slideProgress) - 1) * 0.3 + 1;
+                            }
+                            translate = slideProgress * modify * 260 + 'px';
+                            scale = 1 - Math.abs(slideProgress) / 5;
+                            zIndex = 999 - Math.abs(Math.round(10 * slideProgress));
+                            slide.transform('translateX(' + translate + ') scale(' + scale + ')');
+                            slide.css('zIndex', zIndex);
+                            slide.css('opacity', 1);
+                            if (Math.abs(slideProgress) > 3) {
+                                slide.css('opacity', 0);
+                            }
+                        }
+                    },
+                    setTransition: function (transition) {
+                        for (let i = 0; i < this.slides.length; i++) {
+                            let slide = this.slides.eq(i)
+                            slide.transition(transition);
+                        }
+
+                    }
+                }
+            })
+        }
+        function errorCb(data) {
+
+        }
+        $http('get', `identity/parActivityObject/number/${number}`, null, successCb, errorCb);
+    }
+
+
+    function renderOrgData(number) {
+        function successCb (data) {
+
+        }
+        function errorCb(data) {
+
+        }
+        $http('get', `identity/parCamera/number/${number}`, null, successCb, errorCb);
+    }
+
+
+    function init() {
+        let KEY = {
+            UP: 28,
+            DOWN: 29,
+            LEFT: 30,
+            RIGHT: 31,
+            PC_UP:38,
+            PC_DOWN:40,
+            PC_LEFT:37,
+            PC_RIGHT:39,
+            ENTER: 13,
+            BACK: 114,
+            EXIT: 61
+        };
+        let keyDown = (evt) => {
+            evt = (evt) ? evt : ((window.event) ? window.event : "");//兼容IE和Firefox获得keyBoardEvent对象
+            let keyCode = evt.keyCode ? evt.keyCode : evt.which;
+            switch (keyCode) {
+                case KEY.DOWN:
+                case KEY.PC_DOWN:
+                    break;
+                case KEY.UP:
+                case KEY.PC_UP:
+                    break;
+                case KEY.LEFT:
+                case KEY.PC_LEFT:
+                    swiper.slidePrev();
+                    break;
+                case KEY.RIGHT:
+                case KEY.PC_RIGHT:
+                    swiper.slideNext();
+                    break;
+                case KEY.ENTER:
+                    let index = swiper.activeIndex;
+                    let activity = this.todoList[index];
+                    if (activity.taskType === 'Party') {
+                        window.location = `/party_activity_detail.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.districtId}&number=${this.number}`;
+                    } else {
+                        window.location = `/education.html?activityId=${activity.activityId}&organizationId=${this.currentOrg.districtId}&number=${this.number}`;
+                    }
+                    break;
+                default:
+            }
+            return false;
+        };
+        document.onirkeypress = keyDown;
+        document.onkeydown = keyDown;
+    }
+</script>
+</html>

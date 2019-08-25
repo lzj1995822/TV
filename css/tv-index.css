@@ -28,15 +28,6 @@ h4 {
 h5 {
   font-size: 0.69166666666667vw;
 }
-.title {
-  width: 56.40625vw;
-  height: 4.6875vw;
-  position: relative;
-  top: 40px;
-  left: 40px;
-  background: url("../img/index/title.png") no-repeat;
-  background-size: 100% 100%;
-}
 .container {
   width: 100%;
   height: 100%;
